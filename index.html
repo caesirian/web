@@ -540,16 +540,36 @@
   <div id="menu-container"></div>
 
   <!-- SCRIPT -->
-  <script>
-    // Cargar header.html
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => document.getElementById("header-container").innerHTML = html);
+ <script>
+  // Cargar header
+  fetch("header.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("header-container").innerHTML = html);
 
-    // Cargar menu.html
-    fetch("menu.html")
-      .then(res => res.text())
-      .then(html => document.getElementById("menu-container").innerHTML = html);
-  </script>
+  // Cargar menú
+  fetch("menu.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("menu-container").innerHTML = html;
+
+      // Ahora sí: los elementos ya existen, les asignamos eventos
+      const menuToggle = document.getElementById("menu-toggle");
+      const menuLateral = document.getElementById("menu-lateral");
+      const overlay = document.getElementById("overlay");
+
+      if (menuToggle && menuLateral && overlay) {
+        menuToggle.addEventListener("click", () => {
+          menuLateral.classList.toggle("activo");
+          overlay.style.display = menuLateral.classList.contains("activo") ? "block" : "none";
+        });
+
+        overlay.addEventListener("click", () => {
+          menuLateral.classList.remove("activo");
+          overlay.style.display = "none";
+        });
+      }
+    });
+</script>
 </body>
 </html>
+

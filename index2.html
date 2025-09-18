@@ -625,6 +625,15 @@
     </div>
   </div>
 
+
+    <!-- Señalador de deslizamiento -->
+<div class="swipe-hint">
+    <i class="fas fa-arrows-left-right"></i> Desliza para navegar
+</div>
+
+
+
+  
   <!-- Botón menú móvil -->
   <div class="menu-movil" id="menu-toggle">
       <div class="bar"></div>
@@ -906,6 +915,83 @@ indicadores.forEach(function(indicador) {
     });
 });
 
+    // ===== NAVEGACIÓN TÁCTIL (SWIPE) - AGREGAR AL SCRIPT EXISTENTE =====
+let touchStartX = 0;
+let touchEndX = 0;
+let isSwiping = false;
+const swipeThreshold = 50; // Mínimo de píxeles para considerar un swipe
+
+// Elemento contenedor donde se capturarán los eventos táctiles
+const presentationContainer = document.querySelector('.presentacion-container');
+
+// Detectar el inicio del toque
+function handleTouchStart(e) {
+    if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        isSwiping = true;
+    }
+}
+
+// Detectar el movimiento táctil
+function handleTouchMove(e) {
+    if (!isSwiping) return;
+    
+    // Prevenir el desplazamiento nativo durante el swipe horizontal
+    if (e.touches.length === 1) {
+        const currentX = e.touches[0].clientX;
+        const diff = touchStartX - currentX;
+        
+        // Si el movimiento es principalmente horizontal, prevenir el desplazamiento vertical
+        if (Math.abs(diff) > 10) {
+            e.preventDefault();
+        }
+    }
+}
+
+// Detectar el final del toque
+function handleTouchEnd(e) {
+    if (!isSwiping) return;
+    
+    touchEndX = e.changedTouches[0].clientX;
+    handleSwipe();
+    isSwiping = false;
+}
+
+// Manejar el gesto de deslizamiento
+function handleSwipe() {
+    const diff = touchStartX - touchEndX;
+    const absDiff = Math.abs(diff);
+    
+    // Solo procesar si el movimiento supera el umbral
+    if (absDiff < swipeThreshold) return;
+    
+    // Deslizamiento hacia la izquierda (avanzar)
+    if (diff > 0) {
+        if (paginaActual < totalPaginas - 1) {
+            actualizarPagina(paginaActual + 1);
+        }
+    }
+    // Deslizamiento hacia la derecha (retroceder)
+    else {
+        if (paginaActual > 0) {
+            actualizarPagina(paginaActual - 1);
+        }
+    }
+}
+
+// Agregar event listeners para navegación táctil
+presentationContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+presentationContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+presentationContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+presentationContainer.addEventListener('touchcancel', () => { isSwiping = false; }, { passive: true });
+
+// También agregar eventos a cada página por si el contenedor no los captura
+paginas.forEach(pagina => {
+    pagina.addEventListener('touchstart', handleTouchStart, { passive: true });
+    pagina.addEventListener('touchmove', handleTouchMove, { passive: false });
+    pagina.addEventListener('touchend', handleTouchEnd, { passive: true });
+    pagina.addEventListener('touchcancel', () => { isSwiping = false; }, { passive: true });
+});
 
   </script>
 </body>

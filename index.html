@@ -5,571 +5,835 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cooperativa de Trabajo Coco Querandí Ltda.</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            background: #0a0f0a;
-            color: #e0e0e0;
-            line-height: 1.6;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            touch-action: pan-y;
-        }
-
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, #0D0D0D, #0F5922);
-            color: #FFFFFF;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-        .header h1 {
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            font-size: 2rem;
-            margin: 0;
-            color: #FFFFFF;
-        }
-        .header p {
-            font-size: 15px;
-            opacity: 0.9;
-            margin: 0;
-            color: #BF9A56;
-        }
-        
-        /* Logo containers */
-        .logo-container {
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Logo SVG styling */
-        .logo-svg {
-            width: 100%;
-            height: 100%;
-            fill: #BF9A56;
-        }
-
-        /* PRESENTACION */
-        .presentacion-container {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            background: #121a12;
-            margin: 15px;
-            border-radius: 14px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-        }
-
-        .pagina {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 50px;
-            display: none;
-            overflow-y: auto;
-            background-color: #121a12;
-            border-radius: 14px;
-            transition: transform 0.45s ease, opacity 0.45s ease;
-        }
-
-        .pagina.activa {
-            display: block;
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .pagina.siguiente { transform: translateX(80%); opacity: 0; }
-        .pagina.anterior { transform: translateX(-80%); opacity: 0; }
-
-        /* TITULOS */
-        h1 {
-            font-size: 34px;
-            color: #BF9A56;
-            margin-bottom: 25px;
-            border-bottom: 3px solid #568C30;
-            padding-bottom: 10px;
-        }
-        h2 { font-size: 24px; color: #BF9A56; margin: 20px 0 12px; }
-        h3 { font-size: 20px; color: #e0e0e0; margin: 12px 0 8px; }
-
-        /* TEXTO */
-        p, li {
-            font-size: 17px;
-            margin-bottom: 12px;
-            color: #d0d0d0;
-        }
-        ul { margin-left: 25px; margin-bottom: 18px; }
-
-        /* TARJETAS */
-        .tarjeta {
-            background: #1a231a;
-            border: 1px solid #2c3b2c;
-            padding: 20px;
-            margin-bottom: 18px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-        .tarjeta:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-            background: #1e291e;
-        }
-
-        /* BLOQUES ESPECIALES */
-        .modulo { background: #1c271c; border-left: 4px solid #0F5922; }
-        .objetivo { background: #1a251a; border-left: 4px solid #568C30; }
-        .destacado { background: #242414; border-left: 4px solid #BF9A56; }
-        .consejo { background: #1a251a; border-left: 4px solid #4caf50; }
-        .metodologia { background: #1a231a; border-left: 4px solid #284017; }
-
-        /* FLEX */
-        .contenedor-flex {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-        .columna {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        /* BOTONES */
-        .navegacion {
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            background: linear-gradient(135deg, #0D0D0D, #0F5922);
-            z-index: 9999;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        @media (max-width: 768px) {
-            .navegacion {
-                /*display: none; */
-            }
-        }
-        .btn {
-            background: #568C30;
-            color: #FFFFFF;
-            border: none;
-            padding: 12px 26px;
-            margin: 0 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        .btn:hover {
-            background: #BF9A56;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .btn:disabled { background: #444; color: #777; cursor: not-allowed; }
-
-        /* INDICADORES */
-        .indicadores {
-            display: flex;
-            justify-content: center;
-            margin: 12px 0;
-        }
-        .indicador {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #444;
-            margin: 0 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .indicador.activo { background: #BF9A56; transform: scale(1.25); }
-
-        /* PROGRESO */
-        .progreso {
-            height: 6px;
-            background: #2c3b2c;
-            margin: 10px 0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .barra-progreso {
-            height: 100%;
-            background: linear-gradient(90deg, #0F5922, #568C30);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        /* CONTADOR */
-        .contador-pagina {
-            position: fixed;
-            bottom: 85px;
-            right: 25px;
-            color: #FFFFFF;
-            font-size: 15px;
-            background: rgba(15, 89, 34, 0.9);
-            padding: 10px 18px;
-            border-radius: 25px;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-            font-weight: 600;
-        }
-
-        /* MENU LATERAL */
-        .menu-movil {
-            display: none;
-            position: fixed;
-            top: 55px;
-            left: 20px;
-            z-index: 100;
-            background: #0F5922;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.4);
-            flex-direction: column;
-        }
-        .bar {
-            width: 25px;
-            height: 3px;
-            background: #FFFFFF;
-            margin: 3px 0;
-            border-radius: 2px;
-            transition: 0.3s;
-        }
-        .menu-lateral {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            background: #1a231a;
-            z-index: 99;
-            padding: 90px 20px 20px;
-            transition: left 0.3s ease;
-            border-right: 2px solid #0F5922;
-        }
-        .menu-lateral.activo { left: 0; }
-        .menu-lateral .indicador-menu {
-            display: block;
-            color: #d0d0d0;
-            padding: 14px 16px;
-            margin: 8px 0;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .menu-lateral .indicador-menu:hover { background: rgba(255,255,255,0.1); }
-        .menu-lateral .indicador-menu.activo {
-            background: #0F5922;
-            font-weight: 600;
-            color: #FFFFFF;
-        }
-
-        /* OVERLAY */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 98;
-            display: none;
-        }
-
-        /* NUEVOS ESTILOS PARA LA COOPERATIVA */
-        .logo-cooperativa {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .logo-cooperativa h2 {
-            font-size: 2.5rem;
-            color: #BF9A56;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        
-        .logo-cooperativa p {
-            font-size: 1.2rem;
-            color: #568C30;
-            font-weight: 600;
-        }
-        
-        .info-legal {
-            background: #1a231a;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #568C30;
-        }
-        
-        .info-item {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        
-        .info-label {
-            font-weight: 600;
-            min-width: 180px;
-            color: #BF9A56;
-        }
-        
-        .info-value {
-            color: #d0d0d0;
-        }
-        
-        .articulo {
-            background: #1a231a;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #0F5922;
-        }
-        
-        .articulo h3 {
-            color: #BF9A56;
-            margin-bottom: 15px;
-        }
-        
-        .unidad-productiva {
-            background: #1a231a;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border: 1px solid #2c3b2c;
-        }
-        
-        .unidad-productiva h3 {
-            color: #BF9A56;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .unidad-productiva h3 i {
-            margin-right: 10px;
-            color: #568C30;
-        }
-        
-        .convenio-item {
-            background: #1a231a;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            border: 1px solid #2c3b2c;
-            transition: all 0.3s ease;
-        }
-        
-        .convenio-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-            background: #1e291e;
-        }
-        
-        .convenio-item h3 {
-            color: #BF9A56;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .convenio-item h3 i {
-            margin-right: 10px;
-            color: #568C30;
-        }
-        
-        .eslogan {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #1a231a, #1e291e);
-            border-radius: 10px;
-            margin: 30px 0;
-            border: 1px solid #2c3b2c;
-        }
-        
-        .eslogan h2 {
-            font-size: 2rem;
-            color: #BF9A56;
-            margin-bottom: 15px;
-        }
-        
-        .eslogan p {
-            font-size: 1.2rem;
-            color: #568C30;
-            font-weight: 600;
-        }
-        
-        .centrado {
-            text-align: center;
-        }
-        
-        /* RESPONSIVE */
-        /* RESPONSIVE - Modificado para pantallas horizontales */
-@media (max-width: 1920px) {
-    .pagina { padding: 25px; }
-    h1 { font-size: 26px; }
-    h2 { font-size: 22px; }
-    .btn { padding: 10px 18px; font-size: 14px; }
-    .menu-movil { 
+    body {
+        background: #0a0f0a;
+        color: #e0e0e0;
+        line-height: 1.6;
+        overflow: hidden;
+        height: 100vh;
         display: flex;
-        top: 15px;
-        left: 15px;
-        width: 46px;
-        height: 46px;
+        flex-direction: column;
+        touch-action: pan-y;
     }
-    .contador-pagina {
-        bottom: 70px;
-        right: 15px;
-        font-size: 13px;
-        padding: 8px 14px;
+
+    /* HEADER */
+    .header {
+        background: linear-gradient(135deg, #0D0D0D, #0F5922);
+        color: #FFFFFF;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
     }
-    .tabla-excel {
-        font-size: 12px;
+    .header h1 {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        font-size: 2rem;
+        margin: 0;
+        color: #FFFFFF;
     }
-    .tabla-excel th, .tabla-excel td {
-        padding: 6px 8px;
+    .header p {
+        font-size: 15px;
+        opacity: 0.9;
+        margin: 0;
+        color: #BF9A56;
     }
     
-    /* Ajustes específicos para orientación horizontal */
-    @media (max-height: 600px) and (orientation: landscape) {
-        .header {
-            padding: 12px 20px;
-        }
-        .header h1 {
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        .header p {
-            font-size: 12px;
-        }
-        .menu-movil {
-            top: 12px;
-            left: 12px;
-            width: 40px;
-            height: 40px;
-        }
-        .bar {
-            width: 20px;
-            height: 2px;
-            margin: 2px 0;
-        }
-        .pagina {
-            padding: 20px;
-        }
-        h1 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-        h2 {
-            font-size: 18px;
-        }
-        h3 {
-            font-size: 16px;
-        }
-        p, li {
-            font-size: 14px;
-        }
-        .contador-pagina {
-            bottom: 60px;
-            right: 12px;
-            font-size: 12px;
-            padding: 6px 10px;
+    /* Logo containers */
+    .logo-container {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Logo SVG styling */
+    .logo-svg {
+        width: 100%;
+        height: 100%;
+        fill: #BF9A56;
+    }
+
+    /* PRESENTACION */
+    .presentacion-container {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        background: #121a12;
+        margin: 15px;
+        border-radius: 14px;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+
+    .pagina {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 50px;
+        display: none;
+        overflow-y: auto;
+        background-color: #121a12;
+        border-radius: 14px;
+        transition: transform 0.45s ease, opacity 0.45s ease;
+    }
+
+    .pagina.activa {
+        display: block;
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .pagina.siguiente { transform: translateX(80%); opacity: 0; }
+    .pagina.anterior { transform: translateX(-80%); opacity: 0; }
+
+    /* TITULOS */
+    h1 {
+        font-size: 34px;
+        color: #BF9A56;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #568C30;
+        padding-bottom: 10px;
+    }
+    h2 { font-size: 24px; color: #BF9A56; margin: 20px 0 12px; }
+    h3 { font-size: 20px; color: #e0e0e0; margin: 12px 0 8px; }
+
+    /* TEXTO */
+    p, li {
+        font-size: 17px;
+        margin-bottom: 12px;
+        color: #d0d0d0;
+    }
+    ul { margin-left: 25px; margin-bottom: 18px; }
+
+    /* TARJETAS */
+    .tarjeta {
+        background: #1a231a;
+        border: 1px solid #2c3b2c;
+        padding: 20px;
+        margin-bottom: 18px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .tarjeta:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        background: #1e291e;
+    }
+
+    /* BLOQUES ESPECIALES */
+    .modulo { background: #1c271c; border-left: 4px solid #0F5922; }
+    .objetivo { background: #1a251a; border-left: 4px solid #568C30; }
+    .destacado { background: #242414; border-left: 4px solid #BF9A56; }
+    .consejo { background: #1a251a; border-left: 4px solid #4caf50; }
+    .metodologia { background: #1a231a; border-left: 4px solid #284017; }
+
+    /* FLEX */
+    .contenedor-flex {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+    .columna {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    /* BOTONES */
+    .navegacion {
+        display: flex;
+        justify-content: center;
+        padding: 15px;
+        background: linear-gradient(135deg, #0D0D0D, #0F5922);
+        z-index: 9999;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    @media (max-width: 768px) {
+        .navegacion {
+            /*display: none; */
         }
     }
-}
-    </style>
+    .btn {
+        background: #568C30;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 26px;
+        margin: 0 10px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    .btn:hover {
+        background: #BF9A56;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .btn:disabled { background: #444; color: #777; cursor: not-allowed; }
 
+    /* INDICADORES */
+    .indicadores {
+        display: flex;
+        justify-content: center;
+        margin: 12px 0;
+    }
+    .indicador {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #444;
+        margin: 0 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .indicador.activo { background: #BF9A56; transform: scale(1.25); }
+
+    /* PROGRESO */
+    .progreso {
+        height: 6px;
+        background: #2c3b2c;
+        margin: 10px 0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .barra-progreso {
+        height: 100%;
+        background: linear-gradient(90deg, #0F5922, #568C30);
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    /* CONTADOR */
+    .contador-pagina {
+        position: fixed;
+        bottom: 85px;
+        right: 25px;
+        color: #FFFFFF;
+        font-size: 15px;
+        background: rgba(15, 89, 34, 0.9);
+        padding: 10px 18px;
+        border-radius: 25px;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        font-weight: 600;
+    }
+
+    /* MENU LATERAL */
+    .menu-movil {
+        display: none;
+        position: fixed;
+        top: 55px;
+        left: 20px;
+        z-index: 100;
+        background: #0F5922;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+        flex-direction: column;
+    }
+    .bar {
+        width: 25px;
+        height: 3px;
+        background: #FFFFFF;
+        margin: 3px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+    .menu-lateral {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100%;
+        background: #1a231a;
+        z-index: 99;
+        padding: 90px 20px 20px;
+        transition: left 0.3s ease;
+        border-right: 2px solid #0F5922;
+    }
+    .menu-lateral.activo { left: 0; }
+    .menu-lateral .indicador-menu {
+        display: block;
+        color: #d0d0d0;
+        padding: 14px 16px;
+        margin: 8px 0;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .menu-lateral .indicador-menu:hover { background: rgba(255,255,255,0.1); }
+    .menu-lateral .indicador-menu.activo {
+        background: #0F5922;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    /* OVERLAY */
+    .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 98;
+        display: none;
+    }
+
+    /* NUEVOS ESTILOS PARA LA COOPERATIVA */
+    .logo-cooperativa {
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    .logo-cooperativa h2 {
+        font-size: 2.5rem;
+        color: #BF9A56;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+    
+    .logo-cooperativa p {
+        font-size: 1.2rem;
+        color: #568C30;
+        font-weight: 600;
+    }
+    
+    .info-legal {
+        background: #1a231a;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border-left: 4px solid #568C30;
+    }
+    
+    .info-item {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        min-width: 180px;
+        color: #BF9A56;
+    }
+    
+    .info-value {
+        color: #d0d0d0;
+    }
+    
+    .articulo {
+        background: #1a231a;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        border-left: 4px solid #0F5922;
+    }
+    
+    .articulo h3 {
+        color: #BF9A56;
+        margin-bottom: 15px;
+    }
+    
+    .unidad-productiva {
+        background: #1a231a;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        border: 1px solid #2c3b2c;
+    }
+    
+    .unidad-productiva h3 {
+        color: #BF9A56;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .unidad-productiva h3 i {
+        margin-right: 10px;
+        color: #568C30;
+    }
+    
+    .convenio-item {
+        background: #1a231a;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border: 1px solid #2c3b2c;
+        transition: all 0.3s ease;
+    }
+    
+    .convenio-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        background: #1e291e;
+    }
+    
+    .convenio-item h3 {
+        color: #BF9A56;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .convenio-item h3 i {
+        margin-right: 10px;
+        color: #568C30;
+    }
+    
+    .eslogan {
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #1a231a, #1e291e);
+        border-radius: 10px;
+        margin: 30px 0;
+        border: 1px solid #2c3b2c;
+    }
+    
+    .eslogan h2 {
+        font-size: 2rem;
+        color: #BF9A56;
+        margin-bottom: 15px;
+    }
+    
+    .eslogan p {
+        font-size: 1.2rem;
+        color: #568C30;
+        font-weight: 600;
+    }
+    
+    .centrado {
+        text-align: center;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 1920px) {
+        .pagina { padding: 25px; }
+        h1 { font-size: 26px; }
+        h2 { font-size: 22px; }
+        .btn { padding: 10px 18px; font-size: 14px; }
+        .menu-movil { 
+            display: flex;
+            top: 15px;
+            left: 15px;
+            width: 46px;
+            height: 46px;
+        }
+        .contador-pagina {
+            bottom: 70px;
+            right: 15px;
+            font-size: 13px;
+            padding: 8px 14px;
+        }
+        .tabla-excel {
+            font-size: 12px;
+        }
+        .tabla-excel th, .tabla-excel td {
+            padding: 6px 8px;
+        }
+        
+        /* Ajustes específicos para orientación horizontal */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .header {
+                padding: 12px 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            .header p {
+                font-size: 12px;
+            }
+            .menu-movil {
+                top: 12px;
+                left: 12px;
+                width: 40px;
+                height: 40px;
+            }
+            .bar {
+                width: 20px;
+                height: 2px;
+                margin: 2px 0;
+            }
+            .pagina {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 22px;
+                margin-bottom: 15px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            h3 {
+                font-size: 16px;
+            }
+            p, li {
+                font-size: 14px;
+            }
+            .contador-pagina {
+                bottom: 60px;
+                right: 12px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+    }
+
+    /* Estilos para el contenido de las páginas */
+    .contenido-pagina {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .tarjeta-con-imagen {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+    
+    .tarjeta-con-imagen .icono {
+        font-size: 2.5rem;
+        color: #568C30;
+        min-width: 60px;
+        text-align: center;
+    }
+    
+    .tarjeta-con-imagen .texto {
+        flex: 1;
+    }
+    
+    .lista-destacada {
+        list-style-type: none;
+        margin-left: 0;
+    }
+    
+    .lista-destacada li {
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        background: rgba(191, 154, 86, 0.1);
+        border-left: 4px solid #BF9A56;
+        border-radius: 0 8px 8px 0;
+    }
+
+    /* Loader para contenido que se está cargando */
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        flex-direction: column;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(86, 140, 48, 0.2);
+        border-radius: 50%;
+        border-top: 5px solid #568C30;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
   <!-- HEADER -->
-  <div id="header-container"></div>
+  <div class="header">
+    <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 300 325" preserveAspectRatio="xMidYMid meet">
+            <!-- SVG simplificado para evitar problemas -->
+            <path fill="#BF9A56" d="M150 50c50 0 100 20 135 55s55 85 55 135-20 100-55 135-85 55-135 55-100-20-135-55S15 240 15 190s20-100 55-135S100 50 150 50z"/>
+            <text x="150" y="180" text-anchor="middle" fill="#BF9A56" font-size="40">CQ</text>
+        </svg>
+    </div>
+
+    <div class="header-text">
+        <h1>Cooperativa de Trabajo Coco Querandí</h1>
+        <p>Transformando ideas en soluciones colectivas</p>
+    </div>
+
+    <div class="logo-container">
+        <!-- Logo SVG derecho -->
+        <svg class="logo-svg" viewBox="0 0 300 325" preserveAspectRatio="xMidYMid meet">
+            <!-- SVG simplificado para evitar problemas -->
+            <path fill="#BF9A56" d="M150 50c50 0 100 20 135 55s55 85 55 135-20 100-55 135-85 55-135 55-100-20-135-55S15 240 15 190s20-100 55-135S100 50 150 50z"/>
+            <text x="150" y="180" text-anchor="middle" fill="#BF9A56" font-size="40">CQ</text>
+        </svg>
+    </div>
+  </div>
+
+  <!-- Botón menú móvil -->
+  <div class="menu-movil" id="menu-toggle">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+  </div>
+
+  <!-- Menú lateral -->
+  <div class="menu-lateral" id="menuLateral">
+      <div class="indicador-menu activo" data-pagina="0">Presentación</div>
+      <div class="indicador-menu" data-pagina="1">Objeto Social</div>
+      <div class="indicador-menu" data-pagina="2">Registros</div>
+      <div class="indicador-menu" data-pagina="3">Unidades Productivas</div>
+      <div class="indicador-menu" data-pagina="4">Convenios</div>
+      <div class="indicador-menu" data-pagina="5">ECoCo</div>
+      <div class="indicador-menu" data-pagina="6">RNCyFS Convenios</div>
+  </div>
+  
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
 
   <!-- CONTENIDO PRINCIPAL -->
   <div class="presentacion-container">
-      <!-- Aquí van las páginas (.pagina) -->
+      <!-- Aquí se cargarán las páginas dinámicamente -->
       <div class="pagina activa" id="pagina-0">
-          <h1>Bienvenidos</h1>
-          <p>Contenido de inicio...</p>
+          <div class="contenido-pagina">
+            <div class="logo-cooperativa">
+              <h2>Cooperativa de Trabajo Coco Querandí</h2>
+              <p>Construyendo un futuro sostenible juntos</p>
+            </div>
+            
+            <div class="eslogan">
+              <h2>"Trabajo colectivo, soluciones innovadoras"</h2>
+              <p>Desde 2023 transformando realidades</p>
+            </div>
+            
+            <div class="contenedor-flex">
+              <div class="columna">
+                <div class="tarjeta-con-imagen">
+                  <div class="icono"><i class="fas fa-hands-helping"></i></div>
+                  <div class="texto">
+                    <h3>Cooperativismo</h3>
+                    <p>Basamos nuestro trabajo en los principios cooperativos de ayuda mutua, democracia y equidad.</p>
+                  </div>
+                </div>
+                
+                <div class="tarjeta-con-imagen">
+                  <div class="icono"><i class="fas fa-leaf"></i></div>
+                  <div class="texto">
+                    <h3>Sostenibilidad</h3>
+                    <p>Desarrollamos proyectos que promueven el cuidado del medio ambiente y la economía circular.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="columna">
+                <div class="tarjeta-con-imagen">
+                  <div class="icono"><i class="fas fa-lightbulb"></i></div>
+                  <div class="texto">
+                    <h3>Innovación</h3>
+                    <p>Buscamos constantemente nuevas formas de resolver problemas y crear valor para nuestra comunidad.</p>
+                  </div>
+                </div>
+                
+                <div class="tarjeta-con-imagen">
+                  <div class="icono"><i class="fas fa-users"></i></div>
+                  <div class="texto">
+                    <h3>Comunidad</h3>
+                    <p>Trabajamos en red con otras organizaciones para potenciar nuestro impacto social.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
-      <div class="pagina" id="pagina-1">
-          <h1>Sobre Nosotros</h1>
-          <p>Texto de la cooperativa...</p>
-      </div>
-      <div class="pagina" id="pagina-2">
-          <h1>Proyectos</h1>
-          <p>Descripción de proyectos...</p>
-      </div>
-      <div class="pagina" id="pagina-3">
-          <h1>Contacto</h1>
-          <p>Datos de contacto...</p>
-      </div>
+      
+      <!-- Las otras páginas se cargarán dinámicamente -->
+      <div class="pagina" id="pagina-1"></div>
+      <div class="pagina" id="pagina-2"></div>
+      <div class="pagina" id="pagina-3"></div>
+      <div class="pagina" id="pagina-4"></div>
+      <div class="pagina" id="pagina-5"></div>
+      <div class="pagina" id="pagina-6"></div>
   </div>
 
-  <!-- MENU + INDICADORES -->
-  <div id="menu-container"></div>
+  <!-- Navegación -->
+  <div class="navegacion">
+      <button class="btn" id="btn-prev">Anterior</button>
+      <button class="btn" id="btn-next">Siguiente</button>
+  </div>
+
+  <!-- Indicadores -->
+  <div class="indicadores" id="indicadores">
+      <span class="indicador activo" data-pagina="0"></span>
+      <span class="indicador" data-pagina="1"></span>
+      <span class="indicador" data-pagina="2"></span>
+      <span class="indicador" data-pagina="3"></span>
+      <span class="indicador" data-pagina="4"></span>
+      <span class="indicador" data-pagina="5"></span>
+      <span class="indicador" data-pagina="6"></span>
+  </div>
+
+  <!-- Contador de página -->
+  <div class="contador-pagina">Página <span id="numero-pagina">1</span> de 7</div>
 
   <!-- SCRIPT -->
- <script>
-  // Cargar header
-  fetch("header.html")
-    .then(res => res.text())
-    .then(html => document.getElementById("header-container").innerHTML = html);
-
-  // Cargar menú
-  fetch("menu.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("menu-container").innerHTML = html;
-
-      // Ahora sí: los elementos ya existen, les asignamos eventos
-      const menuToggle = document.getElementById("menu-toggle");
-      const menuLateral = document.getElementById("menu-lateral");
-      const overlay = document.getElementById("overlay");
-
-      if (menuToggle && menuLateral && overlay) {
-        menuToggle.addEventListener("click", () => {
-          menuLateral.classList.toggle("activo");
-          overlay.style.display = menuLateral.classList.contains("activo") ? "block" : "none";
-        });
-
-        overlay.addEventListener("click", () => {
-          menuLateral.classList.remove("activo");
-          overlay.style.display = "none";
-        });
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos del DOM
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuLateral = document.getElementById('menuLateral');
+      const overlay = document.getElementById('overlay');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const indicadores = document.querySelectorAll('.indicador');
+      const indicadoresMenu = document.querySelectorAll('.indicador-menu');
+      const paginas = document.querySelectorAll('.pagina');
+      const contadorPagina = document.getElementById('numero-pagina');
+      
+      // Estado de la aplicación
+      let paginaActual = 0;
+      const totalPaginas = paginas.length;
+      const paginasCargadas = new Set([0]); // Página 0 ya está cargada
+      
+      // Función para cargar una página externa
+      function cargarPaginaExterna(numeroPagina) {
+        // Si la página ya está cargada, no hacer nada
+        if (paginasCargadas.has(numeroPagina)) return;
+        
+        const pagina = document.getElementById(`pagina-${numeroPagina}`);
+        
+        // Mostrar loader
+        pagina.innerHTML = `
+          <div class="loader">
+            <div class="spinner"></div>
+            <p>Cargando contenido...</p>
+          </div>
+        `;
+        
+        // Cargar el contenido externo
+        fetch(`pagina${numeroPagina}.html`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Página no encontrada');
+            }
+            return response.text();
+          })
+          .then(html => {
+            pagina.innerHTML = html;
+            paginasCargadas.add(numeroPagina);
+          })
+          .catch(error => {
+            console.error('Error al cargar la página:', error);
+            pagina.innerHTML = `
+              <div class="contenido-pagina">
+                <h1>Página ${numeroPagina + 1}</h1>
+                <div class="tarjeta">
+                  <p>Error al cargar el contenido. Asegúrate de que el archivo <strong>pagina${numeroPagina}.html</strong> existe.</p>
+                </div>
+                <div class="tarjeta objetivo">
+                  <p>Para que esta página funcione correctamente, crea un archivo llamado <strong>pagina${numeroPagina}.html</strong> con el contenido que deseas mostrar.</p>
+                </div>
+              </div>
+            `;
+            paginasCargadas.add(numeroPagina);
+          });
       }
+      
+      // Función para actualizar la visualización de páginas
+      function actualizarPagina(nuevaPagina) {
+        // Validar que la nueva página esté dentro del rango
+        if (nuevaPagina < 0 || nuevaPagina >= totalPaginas) return;
+        
+        // Cargar la página si no está cargada
+        cargarPaginaExterna(nuevaPagina);
+        
+        // Quitar clase activa de la página actual
+        paginas[paginaActual].classList.remove('activa');
+        indicadores[paginaActual].classList.remove('activo');
+        indicadoresMenu[paginaActual].classList.remove('activo');
+        
+        // Actualizar el índice de página actual
+        paginaActual = nuevaPagina;
+        
+        // Añadir clase activa a la nueva página
+        paginas[paginaActual].classList.add('activa');
+        indicadores[paginaActual].classList.add('activo');
+        indicadoresMenu[paginaActual].classList.add('activo');
+        
+        // Actualizar contador de página
+        contadorPagina.textContent = paginaActual + 1;
+        
+        // Actualizar estado de botones
+        btnPrev.disabled = (paginaActual === 0);
+        btnNext.disabled = (paginaActual === totalPaginas - 1);
+      }
+      
+      // Event Listeners
+      menuToggle.addEventListener('click', function() {
+        menuLateral.classList.toggle('activo');
+        overlay.style.display = menuLateral.classList.contains('activo') ? 'block' : 'none';
+      });
+      
+      overlay.addEventListener('click', function() {
+        menuLateral.classList.remove('activo');
+        overlay.style.display = 'none';
+      });
+      
+      btnPrev.addEventListener('click', function() {
+        actualizarPagina(paginaActual - 1);
+      });
+      
+      btnNext.addEventListener('click', function() {
+        actualizarPagina(paginaActual + 1);
+      });
+      
+      // Navegación por indicadores
+      indicadores.forEach(function(indicador) {
+        indicador.addEventListener('click', function() {
+          const pagina = parseInt(this.getAttribute('data-pagina'));
+          actualizarPagina(pagina);
+        });
+      });
+      
+      // Navegación por menú lateral
+      indicadoresMenu.forEach(function(indicador) {
+        indicador.addEventListener('click', function() {
+          const pagina = parseInt(this.getAttribute('data-pagina'));
+          actualizarPagina(pagina);
+          
+          // Cerrar menú lateral después de seleccionar
+          menuLateral.classList.remove('activo');
+          overlay.style.display = 'none';
+        });
+      });
+      
+      // Inicializar estado de botones
+      btnPrev.disabled = true;
     });
-</script>
+  </script>
 </body>
 </html>
-

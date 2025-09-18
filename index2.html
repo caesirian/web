@@ -14,7 +14,37 @@
         box-sizing: border-box;
         font-family: 'Inter', sans-serif;
     }
+/* Indicador visual de swipe */
+.swipe-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #BF9A56;
+    font-size: 14px;
+    opacity: 0.8;
+    animation: pulse 2s infinite;
+    display: none;
+    z-index: 50;
+}
 
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.4; }
+}
+
+@media (max-width: 768px) {
+    .swipe-hint {
+        display: block;
+    }
+}
+
+/* Mejora para desplazamiento en móviles */
+.pagina {
+    -webkit-overflow-scrolling: touch;
+}
     body {
         background: #0a0f0a;
         color: #e0e0e0;

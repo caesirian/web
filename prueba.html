@@ -513,9 +513,38 @@
             });
     }
 
-    // Resto de las funciones (cambiarPagina, irAPagina, actualizarIndicadores, toggleMenu, configurarSwipe)
-    // ... mantén el resto de tus funciones como estaban
-
+    // Función para inicializar la navegación después de cargar el menú
+    function inicializarNavegacion() {
+        // Configurar botones de navegación
+        document.getElementById('btn-prev').addEventListener('click', () => cambiarPagina(-1));
+        document.getElementById('btn-next').addEventListener('click', () => cambiarPagina(1));
+        
+        // Configurar indicadores
+        const indicadores = document.querySelectorAll('.indicador');
+        indicadores.forEach(ind => {
+            ind.addEventListener('click', () => {
+                const pagina = parseInt(ind.getAttribute('data-pagina'));
+                irAPagina(pagina);
+            });
+        });
+        
+        // Configurar menú lateral
+        const menuItems = document.querySelectorAll('.indicador-menu');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const pagina = parseInt(item.getAttribute('data-pagina'));
+                irAPagina(pagina);
+                toggleMenu();
+            });
+        });
+        
+        // Configurar menú móvil
+        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
+        document.getElementById('overlay').addEventListener('click', toggleMenu);
+        
+        // Configurar eventos táctiles para swipe
+        configurarSwipe();
+    }
 
     // Función para cambiar de página (avanzar o retroceder)
     function cambiarPagina(direccion) {
@@ -620,15 +649,7 @@
         }, false);
     }
 
-    // Cargar header.html
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => document.getElementById("header-container").innerHTML = html);
-
-    // Cargar menu.html
-    fetch("menu.html")
-      .then(res => res.text())
-      .then(html => document.getElementById("menu-container").innerHTML = html);
-  </script>
+    // NOTA: He eliminado las llamadas duplicadas a fetch al final del script
+</script>
 </body>
 </html>

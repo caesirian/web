@@ -80,6 +80,63 @@
         background: rgba(15, 89, 34, 0.8);
         backdrop-filter: blur(5px);
     }
+
+    .tab {
+        position: relative;
+        padding: 10px 15px;
+        cursor: pointer;
+        color: #BF9A56;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        max-width: 160px;
+    }
+
+    .tab:hover {
+        color: #FFFFFF;
+        background: rgba(191, 154, 86, 0.1);
+    }
+
+    .tab.active {
+        color: #FFFFFF;
+    }
+
+    .tab-slider {
+        position: absolute;
+        bottom: 0;
+        height: 3px;
+        background: #BF9A56;
+        transition: all 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+        z-index: 3;
+        border-radius: 3px 3px 0 0;
+    }
+
+    /* Efecto de subrayado animado para las tabs */
+    .tab::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #BF9A56;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .tab:hover::after {
+        width: 60%;
+    }
+
+    .tab.active::after {
+        width: 80%;
+        background: #FFFFFF;
+    }
+
     /* PRESENTACION */
     .presentacion-container {
         flex: 1;

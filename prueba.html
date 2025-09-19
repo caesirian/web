@@ -432,6 +432,26 @@ overscroll-behavior: contain; /* Prevenir efecto de rebote en algunos navegadore
             .header p {
                 font-size: 12px;
             }
+.header-tabs {
+                height: 35px;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 0 10px;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            
+            .header-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .tab {
+                flex-shrink: 0;
+                padding: 10px;
+                font-size: 14px;
+                max-width: 140px;
+            }
+
             .menu-movil {
                 top: 12px;
                 left: 12px;
@@ -465,6 +485,15 @@ overscroll-behavior: contain; /* Prevenir efecto de rebote en algunos navegadore
                 font-size: 12px;
                 padding: 6px 10px;
             }
+          .header-tabs {
+                height: 30px;
+            }
+            
+            .tab {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
         }
     }
   </style>

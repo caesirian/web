@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooperativa de Trabajo Coco Querandí Ltda.</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background: #0a0f0a;
+        color: #e0e0e0;
+        line-height: 1.6;
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        touch-action: pan-y;
+    }
+
+    /* HEADER */
+    .header {
+        background: linear-gradient(135deg, #0D0D0D, #0F5922);
+        color: #FFFFFF;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+    .header h1 {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        font-size: 2rem;
+        margin: 0;
+        color: #FFFFFF;
+    }
+    .header p {
+        font-size: 15px;
+        opacity: 0.9;
+        margin: 0;
+        color: #BF9A56;
+    }
+    
+    /* Logo containers */
+    .logo-container {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Logo SVG styling */
+    .logo-svg {
+        width: 100%;
+        height: 100%;
+        fill: #BF9A56;
+    }
+
+    /* PRESENTACION */
+    .presentacion-container {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        background: #121a12;
+        margin: 15px;
+        border-radius: 14px;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+
+    .pagina {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 50px;
+        display: none;
+        overflow-y: auto;
+        background-color: #121a12;
+        border-radius: 14px;
+        transition: transform 0.45s ease, opacity 0.45s ease;
+    }
+
+    .pagina.activa {
+        display: block;
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .pagina.siguiente { transform: translateX(80%); opacity: 0; }
+    .pagina.anterior { transform: translateX(-80%); opacity: 0; }
+
+    /* TITULOS */
+    h1 {
+        font-size: 34px;
+        color: #BF9A56;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #568C30;
+        padding-bottom: 10px;
+    }
+    h2 { font-size: 24px; color: #BF9A56; margin: 20px 0 12px; }
+    h3 { font-size: 20px; color: #e0e0e0; margin: 12px 0 8px; }
+
+    /* TEXTO */
+    p, li {
+        font-size: 17px;
+        margin-bottom: 12px;
+        color: #d0d0d0;
+    }
+    ul { margin-left: 25px; margin-bottom: 18px; }
+
+    /* TARJETAS */
+    .tarjeta {
+        background: #1a231a;
+        border: 1px solid #2c3b2c;
+        padding: 20px;
+        margin-bottom: 18px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .tarjeta:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        background: #1e291e;
+    }
+
+    /* BLOQUES ESPECIALES */
+    .modulo { background: #1c271c; border-left: 4px solid #0F5922; }
+    .objetivo { background: #1a251a; border-left: 4px solid #568C30; }
+    .destacado { background: #242414; border-left: 4px solid #BF9A56; }
+    .consejo { background: #1a251a; border-left: 4px solid #4caf50; }
+    .metodologia { background: #1a231a; border-left: 4px solid #284017; }
+
+    /* FLEX */
+    .contenedor-flex {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+    .columna {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    /* BOTONES */
+    .navegacion {
+        display: flex;
+        justify-content: center;
+        padding: 15px;
+        background: linear-gradient(135deg, #0D0D0D, #0F5922);
+        z-index: 9999;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    @media (max-width: 768px) {
+        .navegacion {
+            /*display: none; */
+        }
+    }
+    .btn {
+        background: #568C30;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 26px;
+        margin: 0 10px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    .btn:hover {
+        background: #BF9A56;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .btn:disabled { background: #444; color: #777; cursor: not-allowed; }
+
+    /* INDICADORES */
+    .indicadores {
+        display: flex;
+        justify-content: center;
+        margin: 12px 0;
+    }
+    .indicador {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #444;
+        margin: 0 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .indicador.activo { background: #BF9A56; transform: scale(1.25); }
+
+    /* PROGRESO */
+    .progreso {
+        height: 6px;
+        background: #2c3b2c;
+        margin: 10px 0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .barra-progreso {
+        height: 100%;
+        background: linear-gradient(90deg, #0F5922, #568C30);
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    /* CONTADOR */
+    .contador-pagina {
+        position: fixed;
+        bottom: 85px;
+        right: 25px;
+        color: #FFFFFF;
+        font-size: 15px;
+        background: rgba(15, 89, 34, 0.9);
+        padding: 10px 18px;
+        border-radius: 25px;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        font-weight: 600;
+    }
+
+    /* MENU LATERAL */
+    .menu-movil {
+        display: none;
+        position: fixed;
+        top: 55px;
+        left: 20px;
+        z-index: 100;
+        background: #0F5922;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.4);
+        flex-direction: column;
+    }
+    .bar {
+        width: 25px;
+        height: 3px;
+        background: #FFFFFF;
+        margin: 3px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+    .menu-lateral {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100%;
+        background: #1a231a;
+        z-index: 99;
+        padding: 90px 20px 20px;
+        transition: left 0.3s ease;
+        border-right: 2px solid #0F5922;
+    }
+    .menu-lateral.activo { left: 0; }
+    .menu-lateral .indicador-menu {
+        display: block;
+        color: #d0d0d0;
+        padding: 14px 16px;
+        margin: 8px 0;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .menu-lateral .indicador-menu:hover { background: rgba(255,255,255,0.1); }
+    .menu-lateral .indicador-menu.activo {
+        background: #0F5922;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    /* OVERLAY */
+    .overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 98;
+        display: none;
+    }
+
+    /* Estilos para la carga de contenido */
+    .contenido-cargando {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: #BF9A56;
+        font-size: 1.2rem;
+    }
+
+    .contenido-cargando i {
+        margin-right: 10px;
+        animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Botón menú móvil */
+    .menu-movil {
+        display: flex;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1920px) {
+        .pagina { padding: 25px; }
+        h1 { font-size: 26px; }
+        h2 { font-size: 22px; }
+        .btn { padding: 10px 18px; font-size: 14px; }
+        .menu-movil { 
+            display: flex;
+            top: 15px;
+            left: 15px;
+            width: 46px;
+            height: 46px;
+        }
+        .contador-pagina {
+            bottom: 70px;
+            right: 15px;
+            font-size: 13px;
+            padding: 8px 14px;
+        }
+        
+        /* Ajustes específicos para orientación horizontal */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .header {
+                padding: 12px 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            .header p {
+                font-size: 12px;
+            }
+            .menu-movil {
+                top: 12px;
+                left: 12px;
+                width: 40px;
+                height: 40px;
+            }
+            .bar {
+                width: 20px;
+                height: 2px;
+                margin: 2px 0;
+            }
+            .pagina {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 22px;
+                margin-bottom: 15px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            h3 {
+                font-size: 16px;
+            }
+            p, li {
+                font-size: 14px;
+            }
+            .contador-pagina {
+                bottom: 60px;
+                right: 12px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 300 325" preserveAspectRatio="xMidYMid meet">
+            <!-- SVG simplificado para mejor rendimiento -->
+            <g transform="translate(0,325) scale(0.1,-0.1)" fill="#BF9A56" stroke="none">
+                <path d="M100 3176 c71 -104 217 -241 352 -330 62 -41 114 -73 116 -72 1 2 -9 23 -22 47 -29 53 -62 164 -71 237 -6 58 4 62 29 14 8 -15 71 -99 140 -187 68 -88 145 -196 169 -240 43 -76 97 -142 97 -117 0 6 -16 37 -35 69 -19 31 -33 59 -30 61 2 2 36 -19 77 -46 40 -27 82 -52 93 -55 75 -24 828 -25 963 -1 24 4 50 23 92 67 33 34 61 59 64 56 3 -3 -6 -29 -19 -58 -41 -88 -28 -92 18 -6 23 44 89 144 147 222 58 78 121 172 141 209 23 40 39 61 44 54 19 -31 -30 -220 -77 -297 -11 -18 -17 -33 -14 -33 13 0 174 104 231 150 105 85 201 193 246 280 l24 45 3 -33 c6 -65 -53 -222 -139 -368 -73 -123 -149 -199 -284 -284 -63 -40 -115 -74 -115 -77 0 -10 111 9 184 31 73 23 199 86 212 107 15 24 -10 19 -91 -20 -89 -43 -105 -48 -105 -31 0 6 4 10 9 10 18 0 121 102 164 163 87 123 169 294 189 392 12 62 -2 115 -31 115 -9 0 -49 -44 -90 -98 -76 -99 -180 -199 -264 -254 -26 -17 -50 -28 -53 -25 -3 3 1 27 9 54 26 84 29 131 10 164 -29 48 -44 38 -123 -81 -107 -163 -220 -308 -244 -314 -13 -3 -39 -22 -58 -42 -67 -72 -69 -72 -424 -79 -175 -4 -385 -2 -466 3 l-146 9 -73 46 c-40 26 -82 47 -93 47 -14 1 -37 23 -69 68 -26 38 -56 79 -67 93 -10 13 -61 78 -112 143 -51 65 -101 124 -111 130 -43 26 -60 -63 -33 -176 7 -32 10 -58 6 -58 -12 0 -101 62 -146 100 -61 54 -132 129 -191 203 -74 92 -97 88 -33 -7z"/>
+                <path d="M36 3212 c-12 -36 25 -160 77 -264 64 -127 115 -204 185 -280 55 -59 58 -69 12 -43 -14 8 -33 14 -44 15 -15 0 -16 -2 -6 -15 19 -23 129 -82 195 -105 67 -23 205 -51 205 -41 0 4 -35 24 -77 45 -183 89 -264 155 -350 281 -62 91 -130 235 -158 332 -14 48 -27 89 -29 91 -2 2 -7 -5 -10 -16z"/>
+            </g>
+        </svg>
+    </div>
+
+    <div class="header-text">
+        <h1>Cooperativa de Trabajo Coco Querandí</h1>
+        <p>Transformando ideas en soluciones colectivas</p>
+    </div>
+
+    <div class="logo-container">
+        <!-- Logo SVG derecho -->
+        <svg class="logo-svg" viewBox="0 0 300 325" preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(0,325) scale(0.1,-0.1)" fill="#BF9A56" stroke="none">
+                <path d="M100 3176 c71 -104 217 -241 352 -330 62 -41 114 -73 116 -72 1 2 -9 23 -22 47 -29 53 -62 164 -71 237 -6 58 4 62 29 14 8 -15 71 -99 140 -187 68 -88 145 -196 169 -240 43 -76 97 -142 97 -117 0 6 -16 37 -35 69 -19 31 -33 59 -30 61 2 2 36 -19 77 -46 40 -27 82 -52 93 -55 75 -24 828 -25 963 -1 24 4 50 23 92 67 33 34 61 59 64 56 3 -3 -6 -29 -19 -58 -41 -88 -28 -92 18 -6 23 44 89 144 147 222 58 78 121 172 141 209 23 40 39 61 44 54 19 -31 -30 -220 -77 -297 -11 -18 -17 -33 -14 -33 13 0 174 104 231 150 105 85 201 193 246 280 l24 45 3 -33 c6 -65 -53 -222 -139 -368 -73 -123 -149 -199 -284 -284 -63 -40 -115 -74 -115 -77 0 -10 111 9 184 31 73 23 199 86 212 107 15 24 -10 19 -91 -20 -89 -43 -105 -48 -105 -31 0 6 4 10 9 10 18 0 121 102 164 163 87 123 169 294 189 392 12 62 -2 115 -31 115 -9 0 -49 -44 -90 -98 -76 -99 -180 -199 -264 -254 -26 -17 -50 -28 -53 -25 -3 3 1 27 9 54 26 84 29 131 10 164 -29 48 -44 38 -123 -81 -107 -163 -220 -308 -244 -314 -13 -3 -39 -22 -58 -42 -67 -72 -69 -72 -424 -79 -175 -4 -385 -2 -466 3 l-146 9 -73 46 c-40 26 -82 47 -93 47 -14 1 -37 23 -69 68 -26 38 -56 79 -67 93 -10 13 -61 78 -112 143 -51 65 -101 124 -111 130 -43 26 -60 -63 -33 -176 7 -32 10 -58 6 -58 -12 0 -101 62 -146 100 -61 54 -132 129 -191 203 -74 92 -97 88 -33 -7z"/>
+                <path d="M36 3212 c-12 -36 25 -160 77 -264 64 -127 115 -204 185 -280 55 -59 58 -69 12 -43 -14 8 -33 14 -44 15 -15 0 -16 -2 -6 -15 19 -23 129 -82 195 -105 67 -23 205 -51 205 -41 0 4 -35 24 -77 45 -183 89 -264 155 -350 281 -62 91 -130 235 -158 332 -14 48 -27 89 -29 91 -2 2 -7 -5 -10 -16z"/>
+            </g>
+        </svg>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="presentacion-container" id="presentacion-container">
+      <!-- El contenido se cargará dinámicamente aquí -->
+      <div class="contenido-cargando">
+          <i class="fas fa-spinner"></i>
+          <span>Cargando contenido...</span>
+      </div>
+  </div>
+
+  <!-- Botón menú móvil -->
+  <div class="menu-movil" id="menu-toggle">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+  </div>
+
+  <!-- Menú lateral -->
+  <div class="menu-lateral" id="menu-lateral">
+      <span class="indicador-menu activo" data-pagina="0">Inicio</span>
+      <span class="indicador-menu" data-pagina="1">Sobre Nosotros</span>
+      <span class="indicador-menu" data-pagina="2">Proyectos</span>
+      <span class="indicador-menu" data-pagina="3">Contacto</span>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Navegación -->
+  <div class="navegacion">
+      <button class="btn" id="btn-prev">Anterior</button>
+      <button class="btn" id="btn-next">Siguiente</button>
+  </div>
+
+  <!-- Indicadores -->
+  <div class="indicadores" id="indicadores">
+      <span class="indicador activo" data-pagina="0"></span>
+      <span class="indicador" data-pagina="1"></span>
+      <span class="indicador" data-pagina="2"></span>
+      <span class="indicador" data-pagina="3"></span>
+  </div>
+
+  <!-- Contador de página -->
+  <div class="contador-pagina">1 / 4</div>
+
+  <!-- SCRIPT -->
+  <script>
+    // Variables globales
+    let paginaActual = 0;
+    const totalPaginas = 4;
+    const archivosPaginas = [
+        "bienvenida.html", // Página 0 - Inicio
+        "pagina1.html",    // Página 1 - Sobre Nosotros
+        "pagina2.html",    // Página 2 - Proyectos
+        "pagina3.html"     // Página 3 - Contacto
+    ];
+
+    // Inicializar la navegación
+    document.addEventListener('DOMContentLoaded', function() {
+        inicializarNavegacion();
+        // Cargar la página inicial
+        cargarPagina(0);
+    });
+
+    function inicializarNavegacion() {
+        // Configurar botones de navegación
+        document.getElementById('btn-prev').addEventListener('click', () => cambiarPagina(-1));
+        document.getElementById('btn-next').addEventListener('click', () => cambiarPagina(1));
+        
+        // Configurar indicadores
+        const indicadores = document.querySelectorAll('.indicador');
+        indicadores.forEach(ind => {
+            ind.addEventListener('click', () => {
+                const pagina = parseInt(ind.getAttribute('data-pagina'));
+                irAPagina(pagina);
+            });
+        });
+        
+        // Configurar menú lateral
+        const menuItems = document.querySelectorAll('.indicador-menu');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const pagina = parseInt(item.getAttribute('data-pagina'));
+                irAPagina(pagina);
+                toggleMenu();
+            });
+        });
+        
+        // Configurar menú móvil
+        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
+        document.getElementById('overlay').addEventListener('click', toggleMenu);
+        
+        // Configurar eventos táctiles para swipe
+        configurarSwipe();
+    }
+
+    // Función para cargar una página desde archivo externo
+    function cargarPagina(numero) {
+        const contenedor = document.getElementById('presentacion-container');
+        
+        // Mostrar indicador de carga
+        contenedor.innerHTML = `
+            <div class="contenido-cargando">
+                <i class="fas fa-spinner"></i>
+                <span>Cargando contenido...</span>
+            </div>
+        `;
+        
+        // Obtener el nombre del archivo
+        const archivo = archivosPaginas[numero];
+        
+        // Fetch al archivo
+        fetch(archivo)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(html => {
+                // Insertar el contenido en el contenedor
+                contenedor.innerHTML = `
+                    <div class="pagina activa">
+                        ${html}
+                    </div>
+                `;
+                actualizarIndicadores(numero);
+                paginaActual = numero;
+            })
+            .catch(err => {
+                console.error('Error al cargar la página:', err);
+                contenedor.innerHTML = `
+                    <div class="pagina activa">
+                        <h1>Error</h1>
+                        <p>No se pudo cargar el contenido. Por favor, intente nuevamente.</p>
+                        <p>Error: ${err.message}</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Función para cambiar de página (avanzar o retroceder)
+    function cambiarPagina(direccion) {
+        const nuevaPagina = paginaActual + direccion;
+        
+        // Verificar límites
+        if (nuevaPagina >= 0 && nuevaPagina < totalPaginas) {
+            cargarPagina(nuevaPagina);
+        }
+    }
+
+    // Función para ir a una página específica
+    function irAPagina(numero) {
+        if (numero >= 0 && numero < totalPaginas) {
+            cargarPagina(numero);
+        }
+    }
+
+    // Función para actualizar indicadores
+    function actualizarIndicadores(numero) {
+        // Actualizar indicadores de puntos
+        const indicadores = document.querySelectorAll('.indicador');
+        indicadores.forEach((ind, index) => {
+            if (index === numero) {
+                ind.classList.add('activo');
+            } else {
+                ind.classList.remove('activo');
+            }
+        });
+        
+        // Actualizar menú lateral
+        const menuItems = document.querySelectorAll('.indicador-menu');
+        menuItems.forEach((item, index) => {
+            if (index === numero) {
+                item.classList.add('activo');
+            } else {
+                item.classList.remove('activo');
+            }
+        });
+        
+        // Actualizar botones
+        document.getElementById('btn-prev').disabled = (numero === 0);
+        document.getElementById('btn-next').disabled = (numero === totalPaginas - 1);
+        
+        // Actualizar contador
+        const contador = document.querySelector('.contador-pagina');
+        if (contador) {
+            contador.textContent = `${numero + 1} / ${totalPaginas}`;
+        }
+    }
+
+    // Función para mostrar/ocultar menú lateral
+    function toggleMenu() {
+        const menu = document.getElementById('menu-lateral');
+        const overlay = document.getElementById('overlay');
+        
+        menu.classList.toggle('activo');
+        overlay.style.display = menu.classList.contains('activo') ? 'block' : 'none';
+    }
+
+    // Configurar eventos de swipe para navegación
+    function configurarSwipe() {
+        const contenedor = document.getElementById('presentacion-container');
+        let startX, startY, distX, distY;
+        const umbral = 50; // distancia mínima para considerar un swipe
+        const restraint = 100; // máxima distancia vertical permitida para un swipe horizontal
+        const allowedTime = 500; // tiempo máximo para un swipe
+        
+        let startTime;
+        
+        contenedor.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            startX = touch.pageX;
+            startY = touch.pageY;
+            startTime = new Date().getTime();
+            e.preventDefault();
+        }, false);
+        
+        contenedor.addEventListener('touchend', function(e) {
+            const endTime = new Date().getTime();
+            const elapsedTime = endTime - startTime;
+            
+            if (elapsedTime <= allowedTime) {
+                if (Math.abs(distX) >= umbral && Math.abs(distY) <= restraint) {
+                    if (distX > 0) {
+                        // Swipe right - página anterior
+                        cambiarPagina(-1);
+                    } else {
+                        // Swipe left - página siguiente
+                        cambiarPagina(1);
+                    }
+                }
+            }
+            e.preventDefault();
+        }, false);
+        
+        contenedor.addEventListener('touchmove', function(e) {
+            const touch = e.touches[0];
+            distX = touch.pageX - startX;
+            distY = touch.pageY - startY;
+            e.preventDefault();
+        }, false);
+    }
+  </script>
+</body>
+</html>

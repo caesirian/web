@@ -1,0 +1,231 @@
+<script>
+    // Variables globales
+    let paginaActual = 0;
+    const totalPaginas = 4;
+    const archivosPaginas = [
+        "bienvenida.html", // Página 0 - Inicio
+        "pagina1.html",    // Página 1 - Sobre Nosotros
+        "pagina2.html",    // Página 2 - Proyectos
+        "pagina3.html"     // Página 3 - Contacto
+    ];
+
+    // Cargar header.html
+    fetch("header.html")
+      .then(res => {
+          if (!res.ok) {
+              throw new Error('No se pudo cargar el header');
+          }
+          return res.text();
+      })
+      .then(html => {
+          document.getElementById("header-container").innerHTML = html;
+          // Después de cargar el header, cargar el menú
+          return fetch("menu.html");
+      })
+      .then(res => {
+          if (!res.ok) {
+              throw new Error('No se pudo cargar el menú');
+          }
+          return res.text();
+      })
+      .then(html => {
+          document.getElementById("menu-container").innerHTML = html;
+          // Una vez cargado el menú, inicializar la navegación
+          inicializarNavegacion();
+          // Cargar la página inicial
+          cargarPagina(0);
+      })
+      .catch(err => {
+          console.error('Error al cargar componentes:', err);
+          // Mostrar error en el contenedor principal
+          document.getElementById('presentacion-container').innerHTML = `
+              <div class="pagina activa">
+                  <h1>Error</h1>
+                  <p>No se pudieron cargar los componentes. Por favor, verifica que los archivos header.html y menu.html existan.</p>
+              </div>
+          `;
+      });
+
+    // Función para cargar una página desde archivo externo
+    function cargarPagina(numero) {
+        const contenedor = document.getElementById('presentacion-container');
+        
+        // Mostrar indicador de carga
+        contenedor.innerHTML = `
+            <div class="contenido-cargando">
+                <i class="fas fa-spinner"></i>
+                <span>Cargando contenido...</span>
+            </div>
+        `;
+        
+        // Obtener el nombre del archivo
+        const archivo = archivosPaginas[numero];
+        
+        // Fetch al archivo
+        fetch(archivo)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(html => {
+                // Insertar el contenido en el contenedor
+                contenedor.innerHTML = `
+                    <div class="pagina activa">
+                        ${html}
+                    </div>
+                `;
+                actualizarIndicadores(numero);
+                paginaActual = numero;
+            })
+            .catch(err => {
+                console.error('Error al cargar la página:', err);
+                contenedor.innerHTML = `
+                    <div class="pagina activa">
+                        <h1>Error</h1>
+                        <p>No se pudo cargar el contenido. Por favor, intente nuevamente.</p>
+                        <p>Error: ${err.message}</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Función para inicializar la navegación después de cargar el menú
+    function inicializarNavegacion() {
+        // Configurar botones de navegación
+        document.getElementById('btn-prev').addEventListener('click', () => cambiarPagina(-1));
+        document.getElementById('btn-next').addEventListener('click', () => cambiarPagina(1));
+        
+        // Configurar indicadores
+        const indicadores = document.querySelectorAll('.indicador');
+        indicadores.forEach(ind => {
+            ind.addEventListener('click', () => {
+                const pagina = parseInt(ind.getAttribute('data-pagina'));
+                irAPagina(pagina);
+            });
+        });
+        
+        // Configurar menú lateral
+        const menuItems = document.querySelectorAll('.indicador-menu');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const pagina = parseInt(item.getAttribute('data-pagina'));
+                irAPagina(pagina);
+                toggleMenu();
+            });
+        });
+        
+        // Configurar menú móvil
+        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
+        document.getElementById('overlay').addEventListener('click', toggleMenu);
+        
+        // Configurar eventos táctiles para swipe
+        configurarSwipe();
+    }
+
+    // Función para cambiar de página (avanzar o retroceder)
+    function cambiarPagina(direccion) {
+        const nuevaPagina = paginaActual + direccion;
+        
+        // Verificar límites
+        if (nuevaPagina >= 0 && nuevaPagina < totalPaginas) {
+            cargarPagina(nuevaPagina);
+        }
+    }
+
+    // Función para ir a una página específica
+    function irAPagina(numero) {
+        if (numero >= 0 && numero < totalPaginas) {
+            cargarPagina(numero);
+        }
+    }
+
+    // Función para actualizar indicadores
+    function actualizarIndicadores(numero) {
+        // Actualizar indicadores de puntos
+        const indicadores = document.querySelectorAll('.indicador');
+        indicadores.forEach((ind, index) => {
+            if (index === numero) {
+                ind.classList.add('activo');
+            } else {
+                ind.classList.remove('activo');
+            }
+        });
+        
+        // Actualizar menú lateral
+        const menuItems = document.querySelectorAll('.indicador-menu');
+        menuItems.forEach((item, index) => {
+            if (index === numero) {
+                item.classList.add('activo');
+            } else {
+                item.classList.remove('activo');
+            }
+        });
+        
+        // Actualizar botones
+        document.getElementById('btn-prev').disabled = (numero === 0);
+        document.getElementById('btn-next').disabled = (numero === totalPaginas - 1);
+        
+        // Actualizar contador
+        const contador = document.querySelector('.contador-pagina');
+        if (contador) {
+            contador.textContent = `${numero + 1} / ${totalPaginas}`;
+        }
+    }
+
+    // Función para mostrar/ocultar menú lateral
+    function toggleMenu() {
+        const menu = document.getElementById('menu-lateral');
+        const overlay = document.getElementById('overlay');
+        
+        menu.classList.toggle('activo');
+        overlay.style.display = menu.classList.contains('activo') ? 'block' : 'none';
+    }
+
+    // Configurar eventos de swipe para navegación
+    function configurarSwipe() {
+        const contenedor = document.getElementById('presentacion-container');
+        let startX, startY, distX, distY;
+        const umbral = 50; // distancia mínima para considerar un swipe
+        const restraint = 100; // máxima distancia vertical permitida para un swipe horizontal
+        const allowedTime = 500; // tiempo máximo para un swipe
+        
+        let startTime;
+        
+        contenedor.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            startX = touch.pageX;
+            startY = touch.pageY;
+            startTime = new Date().getTime();
+            e.preventDefault();
+        }, false);
+        
+        contenedor.addEventListener('touchend', function(e) {
+            const endTime = new Date().getTime();
+            const elapsedTime = endTime - startTime;
+            
+            if (elapsedTime <= allowedTime) {
+                if (Math.abs(distX) >= umbral && Math.abs(distY) <= restraint) {
+                    if (distX > 0) {
+                        // Swipe right - página anterior
+                        cambiarPagina(-1);
+                    } else {
+                        // Swipe left - página siguiente
+                        cambiarPagina(1);
+                    }
+                }
+            }
+            e.preventDefault();
+        }, false);
+        
+        contenedor.addEventListener('touchmove', function(e) {
+            const touch = e.touches[0];
+            distX = touch.pageX - startX;
+            distY = touch.pageY - startY;
+            e.preventDefault();
+        }, false);
+    }
+
+    // NOTA: He eliminado las llamadas duplicadas a fetch al final del script
+</script>

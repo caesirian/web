@@ -416,6 +416,7 @@
   <div class="contador-pagina">1 / 4</div>
 
   <!-- SCRIPT -->
+
   <script>
     // Variables globales
     let paginaActual = 0;
@@ -427,44 +428,42 @@
         "pagina3.html"     // Página 3 - Contacto
     ];
 
-    // Inicializar la navegación
-    document.addEventListener('DOMContentLoaded', function() {
-        inicializarNavegacion();
-        // Cargar la página inicial
-        cargarPagina(0);
-    });
-
-    function inicializarNavegacion() {
-        // Configurar botones de navegación
-        document.getElementById('btn-prev').addEventListener('click', () => cambiarPagina(-1));
-        document.getElementById('btn-next').addEventListener('click', () => cambiarPagina(1));
-        
-        // Configurar indicadores
-        const indicadores = document.querySelectorAll('.indicador');
-        indicadores.forEach(ind => {
-            ind.addEventListener('click', () => {
-                const pagina = parseInt(ind.getAttribute('data-pagina'));
-                irAPagina(pagina);
-            });
-        });
-        
-        // Configurar menú lateral
-        const menuItems = document.querySelectorAll('.indicador-menu');
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const pagina = parseInt(item.getAttribute('data-pagina'));
-                irAPagina(pagina);
-                toggleMenu();
-            });
-        });
-        
-        // Configurar menú móvil
-        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
-        document.getElementById('overlay').addEventListener('click', toggleMenu);
-        
-        // Configurar eventos táctiles para swipe
-        configurarSwipe();
-    }
+    // Cargar header.html
+    fetch("header.html")
+      .then(res => {
+          if (!res.ok) {
+              throw new Error('No se pudo cargar el header');
+          }
+          return res.text();
+      })
+      .then(html => {
+          document.getElementById("header-container").innerHTML = html;
+          // Después de cargar el header, cargar el menú
+          return fetch("menu.html");
+      })
+      .then(res => {
+          if (!res.ok) {
+              throw new Error('No se pudo cargar el menú');
+          }
+          return res.text();
+      })
+      .then(html => {
+          document.getElementById("menu-container").innerHTML = html;
+          // Una vez cargado el menú, inicializar la navegación
+          inicializarNavegacion();
+          // Cargar la página inicial
+          cargarPagina(0);
+      })
+      .catch(err => {
+          console.error('Error al cargar componentes:', err);
+          // Mostrar error en el contenedor principal
+          document.getElementById('presentacion-container').innerHTML = `
+              <div class="pagina activa">
+                  <h1>Error</h1>
+                  <p>No se pudieron cargar los componentes. Por favor, verifica que los archivos header.html y menu.html existan.</p>
+              </div>
+          `;
+      });
 
     // Función para cargar una página desde archivo externo
     function cargarPagina(numero) {
@@ -510,6 +509,10 @@
                 `;
             });
     }
+
+    // Resto de las funciones (cambiarPagina, irAPagina, actualizarIndicadores, toggleMenu, configurarSwipe)
+    // ... mantén el resto de tus funciones como estaban
+
 
     // Función para cambiar de página (avanzar o retroceder)
     function cambiarPagina(direccion) {

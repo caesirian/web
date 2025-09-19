@@ -71,6 +71,10 @@ padding-bottom: 60px;
         fill: #BF9A56;
     }
     .header-tabs {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -85,7 +89,7 @@ padding-bottom: 60px;
     .tab {
         position: relative;
         padding: 10px 15px;
-        cursor: pointer;
+        cursor: default;
         color: #BF9A56;
         font-weight: 600;
         transition: all 0.3s ease;
@@ -866,6 +870,15 @@ overscroll-behavior: contain; /* Prevenir efecto de rebote en algunos navegadore
 
     // Función para actualizar indicadores
     function actualizarIndicadores(numero) {
+
+       const tabsHeader = document.querySelectorAll('.tab');
+    tabsHeader.forEach((tab, index) => {
+        if (index === numero) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
         // Actualizar indicadores de puntos
         const indicadores = document.querySelectorAll('.indicador');
         indicadores.forEach((ind, index) => {

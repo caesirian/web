@@ -431,42 +431,48 @@
         "pagina3.html"     // Página 3 - Contacto
     ];
 
-    // Cargar header.html
-    fetch("header.html")
-      .then(res => {
-          if (!res.ok) {
-              throw new Error('No se pudo cargar el header');
-          }
-          return res.text();
-      })
-      .then(html => {
-          document.getElementById("header-container").innerHTML = html;
-          // Después de cargar el header, cargar el menú
-          return fetch("menu.html");
-      })
-      .then(res => {
-          if (!res.ok) {
-              throw new Error('No se pudo cargar el menú');
-          }
-          return res.text();
-      })
-      .then(html => {
-          document.getElementById("menu-container").innerHTML = html;
-          // Una vez cargado el menú, inicializar la navegación
-          inicializarNavegacion();
-          // Cargar la página inicial
-          cargarPagina(0);
-      })
-      .catch(err => {
-          console.error('Error al cargar componentes:', err);
-          // Mostrar error en el contenedor principal
-          document.getElementById('presentacion-container').innerHTML = `
-              <div class="pagina activa">
-                  <h1>Error</h1>
-                  <p>No se pudieron cargar los componentes. Por favor, verifica que los archivos header.html y menu.html existan.</p>
-              </div>
-          `;
-      });
+    // Función principal para cargar todos los componentes
+    function cargarComponentes() {
+        // Cargar header.html
+        fetch("header.html")
+            .then(res => {
+                if (!res.ok) throw new Error('No se pudo cargar el header');
+                return res.text();
+            })
+            .then(html => {
+                document.getElementById("header-container").innerHTML = html;
+                // Ahora cargar el menú
+                return fetch("menu.html");
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('No se pudo cargar el menú');
+                return res.text();
+            })
+            .then(html => {
+                document.getElementById("menu-container").innerHTML = html;
+                // Pequeña pausa para asegurar que el DOM se actualice
+                setTimeout(() => {
+                    // Una vez cargado el menú, inicializar la navegación
+                    inicializarNavegacion();
+                    // Cargar la página inicial
+                    cargarPagina(0);
+                }, 100);
+            })
+            .catch(err => {
+                console.error('Error al cargar componentes:', err);
+                // Mostrar error en el contenedor principal
+                document.getElementById('presentacion-container').innerHTML = `
+                    <div class="pagina activa">
+                        <h1>Error</h1>
+                        <p>No se pudieron cargar los componentes. Verifica que los archivos existan.</p>
+                        <p>Error: ${err.message}</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Iniciar la carga cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', cargarComponentes);
 
     // Función para cargar una página desde archivo externo
     function cargarPagina(numero) {
@@ -486,9 +492,7 @@
         // Fetch al archivo
         fetch(archivo)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('No se pudo cargar el archivo: ' + response.statusText);
-                }
+                if (!response.ok) throw new Error('No se pudo cargar: ' + response.statusText);
                 return response.text();
             })
             .then(html => {
@@ -515,32 +519,65 @@
 
     // Función para inicializar la navegación después de cargar el menú
     function inicializarNavegacion() {
+        console.log("Inicializando navegación...");
+        
         // Configurar botones de navegación
-        document.getElementById('btn-prev').addEventListener('click', () => cambiarPagina(-1));
-        document.getElementById('btn-next').addEventListener('click', () => cambiarPagina(1));
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        if (btnPrev && btnNext) {
+            btnPrev.addEventListener('click', () => cambiarPagina(-1));
+            btnNext.addEventListener('click', () => cambiarPagina(1));
+            console.log("Botones de navegación configurados");
+        } else {
+            console.error("No se encontraron los botones de navegación");
+        }
         
         // Configurar indicadores
         const indicadores = document.querySelectorAll('.indicador');
-        indicadores.forEach(ind => {
-            ind.addEventListener('click', () => {
-                const pagina = parseInt(ind.getAttribute('data-pagina'));
-                irAPagina(pagina);
+        if (indicadores.length > 0) {
+            indicadores.forEach(ind => {
+                ind.addEventListener('click', () => {
+                    const pagina = parseInt(ind.getAttribute('data-pagina'));
+                    irAPagina(pagina);
+                });
             });
-        });
+            console.log("Indicadores configurados");
+        } else {
+            console.error("No se encontraron indicadores");
+        }
         
         // Configurar menú lateral
         const menuItems = document.querySelectorAll('.indicador-menu');
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const pagina = parseInt(item.getAttribute('data-pagina'));
-                irAPagina(pagina);
-                toggleMenu();
+        if (menuItems.length > 0) {
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const pagina = parseInt(item.getAttribute('data-pagina'));
+                    irAPagina(pagina);
+                    toggleMenu();
+                });
             });
-        });
+            console.log("Menú lateral configurado");
+        } else {
+            console.error("No se encontraron items del menú lateral");
+        }
         
         // Configurar menú móvil
-        document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
-        document.getElementById('overlay').addEventListener('click', toggleMenu);
+        const menuToggle = document.getElementById('menu-toggle');
+        const overlay = document.getElementById('overlay');
+        const menuLateral = document.getElementById('menu-lateral');
+        
+        console.log('Elemento menu-toggle:', menuToggle);
+        console.log('Elemento overlay:', overlay);
+        console.log('Elemento menu-lateral:', menuLateral);
+        
+        if (menuToggle && overlay && menuLateral) {
+            menuToggle.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+            console.log("Menú móvil y overlay configurados");
+        } else {
+            console.error("No se encontraron todos los elementos del menú");
+        }
         
         // Configurar eventos táctiles para swipe
         configurarSwipe();
@@ -586,8 +623,13 @@
         });
         
         // Actualizar botones
-        document.getElementById('btn-prev').disabled = (numero === 0);
-        document.getElementById('btn-next').disabled = (numero === totalPaginas - 1);
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        if (btnPrev && btnNext) {
+            btnPrev.disabled = (numero === 0);
+            btnNext.disabled = (numero === totalPaginas - 1);
+        }
         
         // Actualizar contador
         const contador = document.querySelector('.contador-pagina');
@@ -598,11 +640,17 @@
 
     // Función para mostrar/ocultar menú lateral
     function toggleMenu() {
+        console.log("Toggle menu llamado");
         const menu = document.getElementById('menu-lateral');
         const overlay = document.getElementById('overlay');
         
-        menu.classList.toggle('activo');
-        overlay.style.display = menu.classList.contains('activo') ? 'block' : 'none';
+        if (menu && overlay) {
+            menu.classList.toggle('activo');
+            overlay.style.display = menu.classList.contains('activo') ? 'block' : 'none';
+            console.log('Menú ' + (menu.classList.contains('activo') ? 'abierto' : 'cerrado'));
+        } else {
+            console.error('No se encontró el menú lateral o el overlay');
+        }
     }
 
     // Configurar eventos de swipe para navegación
@@ -648,8 +696,6 @@
             e.preventDefault();
         }, false);
     }
-
-    // NOTA: He eliminado las llamadas duplicadas a fetch al final del script
 </script>
 </body>
 </html>

@@ -679,9 +679,60 @@ function actualizarIndicadores(numero) {
     if (contador) {
         contador.textContent = `${numero + 1} / ${totalPaginas}`;
     }
+}// Función para actualizar indicadores
+function actualizarIndicadores(numero) {
+    // Actualizar indicadores de puntos
+    const indicadores = document.querySelectorAll('.indicador');
+    indicadores.forEach((ind, index) => {
+        if (index === numero) {
+            ind.classList.add('activo');
+        } else {
+            ind.classList.remove('activo');
+        }
+    });
+    
+    // Actualizar menú lateral
+    const menuItems = document.querySelectorAll('.indicador-menu');
+    menuItems.forEach((item, index) => {
+        if (index === numero) {
+            item.classList.add('activo');
+        } else {
+            item.classList.remove('activo');
+        }
+    });
+    
+    // Actualizar tabs del header
+    const tabs = document.querySelectorAll('.tab');
+    const tabSlider = document.querySelector('.tab-slider');
+    
+    tabs.forEach((tab, index) => {
+        if (index === numero) {
+            tab.classList.add('active');
+            // Mover el slider a la pestaña activa
+            if (tabSlider) {
+                const tabRect = tab.getBoundingClientRect();
+                const tabsContainer = tab.parentElement.getBoundingClientRect();
+                tabSlider.style.width = `${tabRect.width}px`;
+                tabSlider.style.left = `${tabRect.left - tabsContainer.left}px`;
+            }
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Actualizar botones
+    document.getElementById('btn-prev').disabled = (numero === 0);
+    document.getElementById('btn-next').disabled = (numero === totalPaginas - 1);
+    
+    // Actualizar contador
+    const contador = document.querySelector('.contador-pagina');
+    if (contador) {
+        contador.textContent = `${numero + 1} / ${totalPaginas}`;
+    }
 }
   </script>
 </body>
 </html>
+
 
 

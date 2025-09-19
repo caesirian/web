@@ -79,6 +79,8 @@
         margin: 15px;
         border-radius: 14px;
         box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+-webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
+    overflow-y: auto; /* Habilitar desplazamiento vertical */
     }
 
     .pagina {
@@ -93,6 +95,8 @@
         background-color: #121a12;
         border-radius: 14px;
         transition: transform 0.45s ease, opacity 0.45s ease;
+overscroll-behavior: contain; /* Prevenir efecto de rebote en algunos navegadores */
+    touch-action: pan-y; /* Permitir desplazamiento vertical */
     }
 
     .pagina.activa {
@@ -580,8 +584,63 @@
         }
         
         // Configurar eventos táctiles para swipe
-        configurarSwipe();
-    }
+        // Configurar eventos de swipe para navegación
+function configurarSwipe() {
+    const contenedor = document.getElementById('presentacion-container');
+    let startX, startY, distX, distY;
+    const umbral = 50; // distancia mínima para considerar un swipe
+    const restraint = 100; // máxima distancia vertical permitida para un swipe horizontal
+    const allowedTime = 500; // tiempo máximo para un swipe
+    
+    let startTime;
+    let isVerticalScroll = false;
+    
+    contenedor.addEventListener('touchstart', function(e) {
+        const touch = e.touches[0];
+        startX = touch.pageX;
+        startY = touch.pageY;
+        startTime = new Date().getTime();
+        isVerticalScroll = false;
+        e.preventDefault();
+    }, { passive: false });
+    
+    contenedor.addEventListener('touchend', function(e) {
+        const endTime = new Date().getTime();
+        const elapsedTime = endTime - startTime;
+        
+        // Solo procesar como swipe horizontal si no era un desplazamiento vertical
+        if (!isVerticalScroll && elapsedTime <= allowedTime) {
+            if (Math.abs(distX) >= umbral && Math.abs(distY) <= restraint) {
+                if (distX > 0) {
+                    // Swipe right - página anterior
+                    cambiarPagina(-1);
+                } else {
+                    // Swipe left - página siguiente
+                    cambiarPagina(1);
+                }
+            }
+        }
+        e.preventDefault();
+    }, { passive: false });
+    
+    contenedor.addEventListener('touchmove', function(e) {
+        const touch = e.touches[0];
+        distX = touch.pageX - startX;
+        distY = touch.pageY - startY;
+        
+        // Determinar si el usuario está intentando desplazarse verticalmente
+        if (Math.abs(distY) > Math.abs(distX) && Math.abs(distY) > 10) {
+            isVerticalScroll = true;
+            // Permitir el comportamiento por defecto (desplazamiento)
+            return;
+        }
+        
+        // Para movimientos horizontales, prevenir el desplazamiento por defecto
+        if (Math.abs(distX) > Math.abs(distY)) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
 
     // Función para cambiar de página (avanzar o retroceder)
     function cambiarPagina(direccion) {

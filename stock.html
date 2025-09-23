@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Control Pro | Sistema Real</title>
+    <title>Forrajería - Sistema de Inventario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -391,23 +391,27 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1>Inventory Control Pro</h1>
-                <p>Sistema Real - Datos en Tiempo Real</p>
+                <h1>Forrajería - Inventario</h1>
+                <p>Sistema de Control de Stock</p>
             </div>
             
             <div class="nav-section">
                 <div class="nav-section-title">Control Central</div>
                 <a href="#" class="nav-item active" data-section="dashboard">
-                    <i class="fas fa-chart-dashboard"></i>
-                    Dashboard en Tiempo Real
+                    <i class="fas fa-chart-bar"></i>
+                    Dashboard Principal
                 </a>
                 <a href="#" class="nav-item" data-section="products">
                     <i class="fas fa-boxes"></i>
-                    Productos Reales
+                    Gestión de Productos
                 </a>
                 <a href="#" class="nav-item" data-section="movements">
                     <i class="fas fa-exchange-alt"></i>
-                    Movimientos Reales
+                    Movimientos de Stock
+                </a>
+                <a href="#" class="nav-item" data-section="alerts">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Alertas de Stock
                 </a>
             </div>
             
@@ -429,8 +433,8 @@
                 <div class="nav-item">
                     <i class="fas fa-user-shield"></i>
                     <div>
-                        <div>Admin Senior</div>
-                        <small>Datos Reales - Sin Simulación</small>
+                        <div>Administrador</div>
+                        <small>Forrajería - Sistema Stock</small>
                     </div>
                 </div>
             </div>
@@ -441,7 +445,7 @@
             <!-- Header -->
             <div class="main-header">
                 <div class="header-title">
-                    <h2>Panel de Control - Datos Reales</h2>
+                    <h2>Panel de Control - Forrajería</h2>
                     <p>
                         <span id="connection-status" class="badge badge-success">
                             <i class="fas fa-check-circle"></i> Conectado a Google Sheets
@@ -462,7 +466,7 @@
             <!-- Indicadores de Carga -->
             <div class="alert alert-info d-flex align-items-center" id="loading-indicator" style="display: none !important;">
                 <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                <span>Cargando datos REALES desde Google Sheets...</span>
+                <span>Cargando datos desde Google Sheets...</span>
             </div>
             
             <!-- Dashboard Section -->
@@ -474,7 +478,7 @@
                             <i class="fas fa-boxes"></i>
                         </div>
                         <div class="stat-value" id="total-products">--</div>
-                        <div class="stat-label">Total de Productos REALES</div>
+                        <div class="stat-label">Total de Productos</div>
                     </div>
                     
                     <div class="stat-card warning">
@@ -482,7 +486,7 @@
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-value" id="critical-stock">--</div>
-                        <div class="stat-label">Stock Crítico REAL</div>
+                        <div class="stat-label">Stock Crítico</div>
                     </div>
                     
                     <div class="stat-card success">
@@ -490,7 +494,7 @@
                             <i class="fas fa-arrow-up"></i>
                         </div>
                         <div class="stat-value" id="total-value">$--</div>
-                        <div class="stat-label">Valor Total REAL</div>
+                        <div class="stat-label">Valor Total en Stock</div>
                     </div>
                     
                     <div class="stat-card danger">
@@ -498,7 +502,7 @@
                             <i class="fas fa-industry"></i>
                         </div>
                         <div class="stat-value" id="total-categories">--</div>
-                        <div class="stat-label">Categorías ACTIVAS</div>
+                        <div class="stat-label">Categorías Activas</div>
                     </div>
                 </div>
                 
@@ -506,7 +510,7 @@
                 <div class="dashboard-grid">
                     <div class="chart-panel">
                         <div class="panel-header">
-                            <h3 class="panel-title">Distribución por Categorías (REAL)</h3>
+                            <h3 class="panel-title">Distribución por Categorías</h3>
                         </div>
                         <div>
                             <canvas id="categoryChart" height="250"></canvas>
@@ -515,24 +519,24 @@
                     
                     <div class="alert-panel">
                         <div class="panel-header">
-                            <h3 class="panel-title">Alertas de Stock REALES</h3>
+                            <h3 class="panel-title">Alertas de Stock Crítico</h3>
                             <span class="badge badge-danger" id="critical-alerts-count">0 críticas</span>
                         </div>
                         <div id="alerts-container">
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                Cargando alertas reales desde Google Sheets...
+                                Cargando alertas desde Google Sheets...
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Tabla de Productos REALES -->
+                <!-- Tabla de Productos -->
                 <div class="data-table">
                     <div class="table-header">
-                        <h3 class="panel-title mb-0">Productos REALES de la Forrajería</h3>
+                        <h3 class="panel-title mb-0">Inventario de Productos - Forrajería</h3>
                         <div class="d-flex gap-2">
-                            <input type="text" class="form-control form-control-sm" id="search-products" placeholder="Buscar producto real...">
+                            <input type="text" class="form-control form-control-sm" id="search-products" placeholder="Buscar producto...">
                             <button class="btn btn-outline btn-sm" id="btn-refresh-data">
                                 <i class="fas fa-redo"></i> Refrescar
                             </button>
@@ -547,8 +551,8 @@
                                     <th>Producto</th>
                                     <th>Descripción</th>
                                     <th>Precio</th>
-                                    <th>Stock</th>
-                                    <th>Mínimo</th>
+                                    <th>Stock Actual</th>
+                                    <th>Stock Mínimo</th>
                                     <th>Categoría</th>
                                     <th>Proveedor</th>
                                     <th>Estado</th>
@@ -558,9 +562,47 @@
                                 <tr>
                                     <td colspan="9" class="text-center py-4">
                                         <div class="spinner-border text-primary" role="status">
-                                            <span class="visually-hidden">Cargando datos reales...</span>
+                                            <span class="visually-hidden">Cargando datos...</span>
                                         </div>
-                                        <div class="mt-2">Cargando datos REALES desde Google Sheets...</div>
+                                        <div class="mt-2">Cargando datos desde Google Sheets...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movimientos Section -->
+            <div id="movements" class="section" style="display: none;">
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="panel-title mb-0">Historial de Movimientos</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control form-control-sm" id="search-movements" placeholder="Buscar movimiento...">
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID Movimiento</th>
+                                    <th>ID Producto</th>
+                                    <th>Producto</th>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                    <th>Fecha</th>
+                                    <th>Motivo</th>
+                                    <th>Usuario</th>
+                                    <th>Stock Anterior</th>
+                                    <th>Stock Nuevo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="movements-table-body">
+                                <tr>
+                                    <td colspan="10" class="text-center py-4 text-muted">
+                                        Selecciona la pestaña de movimientos para cargar los datos
                                     </td>
                                 </tr>
                             </tbody>
@@ -574,19 +616,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // =============================================
-        // CONFIGURACIÓN PRINCIPAL - DATOS REALES
+        // CONFIGURACIÓN PRINCIPAL
         // =============================================
         
-        // ID de tu planilla de Google Sheets REAL
-        const SPREADSHEET_ID = '1WZ8C9FlADPtHCddut35qCJWp_DJNz2IrZDmPIYIuFEw';
+        // URL de tu Web App de Google Apps Script (REEMPLAZA CON TU URL)
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwLFH0VZAp1DZiwlON_4AJrnIl8Q0G8JtvgXVntFSzOV1wdvHuZtCbKl3Lb4OYlkn0j4A/exec';
         
         // Estado de la aplicación
         const APP_STATE = {
             products: [],
+            movements: [],
             categories: [],
             lastUpdate: null,
             charts: {},
-            isOnline: false
+            isOnline: false,
+            currentSection: 'dashboard'
         };
 
         // =============================================
@@ -594,12 +638,12 @@
         // =============================================
         
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Iniciando Sistema con Datos REALES');
-            console.log('📊 Planilla REAL:', SPREADSHEET_ID);
+            console.log('🚀 Iniciando Sistema de Inventario - Forrajería');
+            console.log('📊 Web App URL:', WEB_APP_URL);
             
             initializeApp();
             setupEventListeners();
-            loadRealDataFromSheets(); // Cargar datos REALES inmediatamente
+            loadDataFromSheets(); // Cargar datos inmediatamente
         });
 
         function initializeApp() {
@@ -609,187 +653,199 @@
 
         function setupEventListeners() {
             // Botón de sincronización
-            document.getElementById('btn-sync').addEventListener('click', loadRealDataFromSheets);
-            document.getElementById('btn-refresh-data').addEventListener('click', loadRealDataFromSheets);
+            document.getElementById('btn-sync').addEventListener('click', loadDataFromSheets);
+            document.getElementById('btn-refresh-data').addEventListener('click', loadDataFromSheets);
             
             // Botón de exportación
-            document.getElementById('btn-export').addEventListener('click', exportRealData);
+            document.getElementById('btn-export').addEventListener('click', exportData);
             
             // Búsqueda de productos
-            document.getElementById('search-products').addEventListener('input', filterRealProducts);
+            document.getElementById('search-products').addEventListener('input', filterProducts);
+            document.getElementById('search-movements').addEventListener('input', filterMovements);
+            
+            // Navegación del sidebar
+            document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    switchSection(section);
+                });
+            });
+        }
+
+        function switchSection(section) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.style.display = 'none';
+            });
+            
+            // Mostrar sección seleccionada
+            document.getElementById(section).style.display = 'block';
+            
+            // Actualizar navegación activa
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+            
+            APP_STATE.currentSection = section;
+            
+            // Cargar datos específicos de la sección si es necesario
+            if (section === 'movements' && APP_STATE.movements.length === 0) {
+                loadMovementsData();
+            }
         }
 
         // =============================================
-        // CONEXIÓN DIRECTA CON GOOGLE SHEETS - DATOS REALES
+        // CONEXIÓN CON GOOGLE SHEETS VIA WEB APP
         // =============================================
 
-        async function loadRealDataFromSheets() {
+        async function loadDataFromSheets() {
             showLoading(true);
             
             try {
-                console.log('📥 Conectando con Google Sheets para datos REALES...');
+                console.log('📥 Conectando con Web App para datos...');
                 
-                // Cargar datos REALES directamente desde Google Sheets
-                const productsData = await fetchRealSheetData('Productos');
-                APP_STATE.products = processRealProductsData(productsData);
-                APP_STATE.categories = extractRealCategories(APP_STATE.products);
+                // Cargar datos de productos
+                const productsData = await fetchDataFromWebApp('Productos');
+                APP_STATE.products = processProductsData(productsData);
+                APP_STATE.categories = extractCategories(APP_STATE.products);
                 
                 APP_STATE.lastUpdate = new Date();
                 APP_STATE.isOnline = true;
                 
-                updateRealUI();
-                updateRealCharts();
+                updateUI();
+                updateCharts();
                 showLoading(false);
                 
-                console.log('✅ Datos REALES cargados exitosamente');
-                console.log('📦 Productos REALES:', APP_STATE.products.length);
-                console.log('🏷️ Categorías REALES:', APP_STATE.categories.length);
+                console.log('✅ Datos cargados exitosamente');
+                console.log('📦 Productos:', APP_STATE.products.length);
+                console.log('🏷️ Categorías:', APP_STATE.categories.length);
                 
             } catch (error) {
-                console.error('❌ Error al cargar datos REALES:', error);
+                console.error('❌ Error al cargar datos:', error);
                 APP_STATE.isOnline = false;
                 showError('Error de conexión con Google Sheets: ' + error.message);
                 showLoading(false);
             }
         }
 
-        async function fetchRealSheetData(sheetName) {
-            // Usar la API de Google Sheets para obtener datos REALES
-            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?sheet=${sheetName}&tqx=out:json`;
-            
-            console.log(`📡 Solicitando datos REALES de: ${sheetName}`);
-            
+        async function loadMovementsData() {
             try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Error HTTP: ${response.status}`);
-                }
+                console.log('📥 Cargando datos de movimientos...');
                 
-                const text = await response.text();
-                const jsonStart = text.indexOf('{');
-                const jsonEnd = text.lastIndexOf('}') + 1;
-                const jsonText = text.substring(jsonStart, jsonEnd);
+                const movementsData = await fetchDataFromWebApp('Movimientos');
+                APP_STATE.movements = processMovementsData(movementsData);
+                updateMovementsTable();
                 
-                const data = JSON.parse(jsonText);
-                console.log('📊 Datos REALES obtenidos:', data);
+                console.log('📊 Movimientos cargados:', APP_STATE.movements.length);
                 
-                return convertRealSheetsData(data);
             } catch (error) {
-                console.error('❌ Error fetching real data:', error);
-                throw new Error('No se pudieron cargar los datos REALES de Google Sheets');
+                console.error('❌ Error al cargar movimientos:', error);
+                showError('Error al cargar movimientos: ' + error.message);
             }
         }
 
-        function convertRealSheetsData(data) {
-            // Convertir la estructura compleja de Google Sheets a un formato simple
-            if (!data || !data.table || !data.table.rows) {
-                throw new Error('Formato de datos REALES no reconocido');
+        async function fetchDataFromWebApp(sheetName) {
+            const url = `${WEB_APP_URL}?sheet=${encodeURIComponent(sheetName)}`;
+            
+            console.log(`📡 Solicitando datos de: ${sheetName}`);
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
             }
             
-            const rows = [];
-            data.table.rows.forEach((row, rowIndex) => {
-                const rowData = [];
-                if (row.c) {
-                    row.c.forEach((cell, cellIndex) => {
-                        // Extraer el valor real de la celda
-                        let value = '';
-                        if (cell) {
-                            if (cell.v !== null && cell.v !== undefined) {
-                                value = cell.v;
-                            } else if (cell.f) {
-                                value = cell.f; // Fórmulas
-                            }
-                        }
-                        rowData.push(value);
-                    });
-                }
-                rows.push(rowData);
-            });
+            const data = await response.json();
+            console.log(`📊 Datos de ${sheetName} obtenidos:`, data.length, 'registros');
             
-            console.log('📋 Datos REALES convertidos:', rows);
-            return rows;
+            return data;
         }
 
-        function processRealProductsData(data) {
-            console.log('🔧 Procesando datos REALES de productos...');
+        function processProductsData(data) {
+            console.log('🔧 Procesando datos de productos...');
             
             if (!Array.isArray(data)) {
-                console.error('❌ Error: datos REALES no son un array', data);
+                console.error('❌ Error: datos no son un array', data);
                 return [];
             }
             
-            // Encontrar la fila de encabezados
-            let startIndex = 0;
-            if (data.length > 0) {
-                const firstRow = data[0];
-                const hasHeaders = firstRow.some(cell => 
-                    typeof cell === 'string' && 
-                    (cell.includes('ID') || cell.includes('Nombre') || cell.includes('Precio'))
-                );
-                
-                if (hasHeaders) {
-                    startIndex = 1;
-                    console.log('📑 Encabezados detectados, empezando desde fila:', startIndex);
-                }
-            }
-            
-            const realProducts = [];
-            
-            for (let i = startIndex; i < data.length; i++) {
-                const row = data[i];
-                if (!row || row.length === 0) continue;
-                
-                // Asegurar que la fila tenga al menos 8 columnas
-                const fullRow = [...row];
-                while (fullRow.length < 8) fullRow.push('');
-                
-                const product = {
-                    id: fullRow[0] || `AUTO-${i}`,
-                    name: fullRow[1] || 'Producto sin nombre',
-                    description: fullRow[2] || '',
-                    price: parseFloat(fullRow[3]) || 0,
-                    stock: parseInt(fullRow[4]) || 0,
-                    minStock: parseInt(fullRow[5]) || 0,
-                    category: fullRow[6] || 'Sin categoría',
-                    provider: fullRow[7] || 'Sin proveedor'
+            const products = data.map((product, index) => {
+                // Mapear según los encabezados de tu planilla
+                return {
+                    id: product.ID || `AUTO-${index}`,
+                    name: product.Nombre || 'Producto sin nombre',
+                    description: product.Descripción || '',
+                    price: parseFloat(product.Precio) || 0,
+                    stock: parseInt(product['Stock Actual']) || 0,
+                    minStock: parseInt(product['Stock Mínimo']) || 0,
+                    category: product.Categoría || 'Sin categoría',
+                    provider: product.Proveedor || 'Sin proveedor',
+                    creationDate: product['Fecha Creación'] || ''
                 };
-                
-                // Solo agregar productos válidos
-                if (product.name !== 'Producto sin nombre' && product.id !== 'AUTO-${i}') {
-                    realProducts.push(product);
-                }
-            }
-            
-            console.log('✅ Productos REALES procesados:', realProducts.length);
-            return realProducts;
+            }).filter(product => product.name !== 'Producto sin nombre' && product.id);
+
+            console.log('✅ Productos procesados:', products.length);
+            return products;
         }
 
-        function extractRealCategories(products) {
+        function processMovementsData(data) {
+            console.log('🔧 Procesando datos de movimientos...');
+            
+            if (!Array.isArray(data)) {
+                return [];
+            }
+            
+            const movements = data.map(movement => {
+                return {
+                    id: movement.ID || '',
+                    productId: movement.ID_Producto || '',
+                    productName: movement.Producto || '',
+                    type: movement.Tipo || '',
+                    quantity: parseInt(movement.Cantidad) || 0,
+                    date: movement.Fecha || '',
+                    reason: movement.Motivo || '',
+                    user: movement.Usuario || '',
+                    previousStock: parseInt(movement['Stock Anterior']) || 0,
+                    newStock: parseInt(movement['Stock Nuevo']) || 0
+                };
+            }).filter(movement => movement.id && movement.productId);
+
+            console.log('✅ Movimientos procesados:', movements.length);
+            return movements;
+        }
+
+        function extractCategories(products) {
             const categories = {};
             products.forEach(product => {
                 if (product.category && product.category.trim() !== '') {
                     if (!categories[product.category]) {
-                        categories[product.category] = 0;
+                        categories[product.category] = {
+                            count: 0,
+                            totalValue: 0,
+                            totalStock: 0
+                        };
                     }
-                    categories[product.category]++;
+                    categories[product.category].count++;
+                    categories[product.category].totalValue += product.price * product.stock;
+                    categories[product.category].totalStock += product.stock;
                 }
             });
             
-            return Object.entries(categories).map(([name, count]) => ({
+            return Object.entries(categories).map(([name, data]) => ({
                 name: name,
-                count: count,
-                totalValue: products
-                    .filter(p => p.category === name)
-                    .reduce((sum, p) => sum + (p.price * p.stock), 0)
+                count: data.count,
+                totalValue: data.totalValue,
+                totalStock: data.totalStock
             }));
         }
 
         // =============================================
-        // ACTUALIZACIÓN DE LA INTERFAZ CON DATOS REALES
+        // ACTUALIZACIÓN DE LA INTERFAZ
         // =============================================
 
-        function updateRealUI() {
-            // Actualizar estadísticas principales con datos REALES
+        function updateUI() {
+            // Actualizar estadísticas principales
             document.getElementById('total-products').textContent = APP_STATE.products.length;
             
             const criticalProducts = APP_STATE.products.filter(p => p.stock <= p.minStock);
@@ -800,15 +856,15 @@
             
             document.getElementById('total-categories').textContent = APP_STATE.categories.length;
             
-            // Actualizar contador de alertas REALES
+            // Actualizar contador de alertas
             const criticalAlerts = APP_STATE.products.filter(p => p.stock <= p.minStock);
-            document.getElementById('alerts-count').textContent = criticalAlerts.length;
+            const criticalAlertsCount = criticalAlerts.filter(p => p.stock <= p.minStock * 0.5).length;
             document.getElementById('critical-alerts-count').textContent = 
-                criticalAlerts.filter(p => p.stock <= p.minStock * 0.5).length + ' críticas';
+                criticalAlertsCount + ' críticas';
             
             // Actualizar última sincronización
             document.getElementById('last-update').textContent = 
-                `Última actualización REAL: ${APP_STATE.lastUpdate.toLocaleTimeString()}`;
+                `Última actualización: ${APP_STATE.lastUpdate.toLocaleTimeString()}`;
             
             // Actualizar estado de conexión
             const statusElement = document.getElementById('connection-status');
@@ -816,7 +872,7 @@
             
             if (APP_STATE.isOnline) {
                 statusElement.className = 'badge badge-success';
-                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Datos REALES cargados';
+                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Datos cargados correctamente';
                 sheetsStatus.querySelector('.status-indicator').className = 'status-indicator status-online';
             } else {
                 statusElement.className = 'badge badge-danger';
@@ -824,18 +880,16 @@
                 sheetsStatus.querySelector('.status-indicator').className = 'status-indicator status-offline';
             }
             
-            // Actualizar tabla de productos REALES
-            updateRealProductsTable();
-            
-            // Actualizar alertas REALES
-            updateRealAlerts();
+            // Actualizar tablas
+            updateProductsTable();
+            updateAlerts();
         }
 
-        function updateRealProductsTable() {
+        function updateProductsTable() {
             const tbody = document.getElementById('products-table-body');
             
             if (APP_STATE.products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No hay productos REALES en la planilla</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No hay productos en la planilla</td></tr>';
                 return;
             }
             
@@ -857,7 +911,7 @@
                         <td class="fw-bold">${product.id}</td>
                         <td class="fw-bold">${product.name}</td>
                         <td>${product.description || '--'}</td>
-                        <td>$${product.price.toFixed(2)}</td>
+                        <td>$${product.price.toLocaleString('es-AR')}</td>
                         <td class="${isCritical ? 'fw-bold text-danger' : ''}">${product.stock}</td>
                         <td>${product.minStock}</td>
                         <td>${product.category}</td>
@@ -872,7 +926,46 @@
             }).join('');
         }
 
-        function updateRealAlerts() {
+        function updateMovementsTable() {
+            const tbody = document.getElementById('movements-table-body');
+            
+            if (APP_STATE.movements.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4 text-muted">No hay movimientos registrados</td></tr>';
+                return;
+            }
+            
+            // Ordenar por fecha más reciente primero
+            const sortedMovements = [...APP_STATE.movements].sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            tbody.innerHTML = sortedMovements.map(movement => {
+                const isEntry = movement.type === 'ENTRADA';
+                
+                return `
+                    <tr>
+                        <td class="fw-bold">${movement.id}</td>
+                        <td>${movement.productId}</td>
+                        <td>${movement.productName}</td>
+                        <td>
+                            <span class="badge ${isEntry ? 'badge-success' : 'badge-danger'}">
+                                ${movement.type}
+                            </span>
+                        </td>
+                        <td class="${isEntry ? 'text-success' : 'text-danger'} fw-bold">
+                            ${isEntry ? '+' : '-'}${movement.quantity}
+                        </td>
+                        <td>${formatDate(movement.date)}</td>
+                        <td>${movement.reason}</td>
+                        <td>${movement.user}</td>
+                        <td>${movement.previousStock}</td>
+                        <td>${movement.newStock}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateAlerts() {
             const container = document.getElementById('alerts-container');
             const criticalProducts = APP_STATE.products.filter(p => p.stock <= p.minStock);
             
@@ -880,7 +973,7 @@
                 container.innerHTML = `
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle me-2"></i>
-                        ¡Excelente! No hay productos con stock crítico REAL.
+                        ¡Excelente! No hay productos con stock crítico.
                     </div>
                 `;
                 return;
@@ -895,17 +988,19 @@
             
             container.innerHTML = sortedAlerts.map(product => {
                 const severity = product.stock <= product.minStock * 0.5 ? 'critical' : 'warning';
+                const severityPercentage = Math.round((product.stock / product.minStock) * 100);
                 
                 return `
                     <div class="alert-item ${severity}">
                         <div class="alert-title">
                             <i class="fas fa-${severity === 'critical' ? 'exclamation-circle' : 'exclamation-triangle'}"></i>
-                            ${product.name}
+                            ${product.name} (${product.id})
                         </div>
                         <div class="alert-desc">
-                            Stock: ${product.stock} unidades (Mínimo: ${product.minStock}) | 
-                            Categoría: ${product.category} | 
-                            Proveedor: ${product.provider}
+                            <strong>Stock:</strong> ${product.stock} unidades | 
+                            <strong>Mínimo:</strong> ${product.minStock} | 
+                            <strong>Nivel:</strong> ${severityPercentage}% |
+                            <strong>Categoría:</strong> ${product.category}
                         </div>
                     </div>
                 `;
@@ -913,7 +1008,7 @@
         }
 
         // =============================================
-        // GRÁFICOS CON DATOS REALES
+        // GRÁFICOS
         // =============================================
 
         function initializeCharts() {
@@ -926,7 +1021,8 @@
                         data: [],
                         backgroundColor: [
                             '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'
                         ],
                         borderWidth: 2,
                         borderColor: '#fff'
@@ -961,7 +1057,7 @@
             });
         }
 
-        function updateRealCharts() {
+        function updateCharts() {
             if (!APP_STATE.charts.category) return;
             
             const categoryData = APP_STATE.categories;
@@ -1003,7 +1099,7 @@
             document.querySelector('.main-content').insertBefore(alert, document.querySelector('.main-content').firstChild);
         }
 
-        function filterRealProducts() {
+        function filterProducts() {
             const searchTerm = document.getElementById('search-products').value.toLowerCase();
             const rows = document.querySelectorAll('#products-table-body tr');
             
@@ -1013,20 +1109,40 @@
             });
         }
 
-        function exportRealData() {
+        function filterMovements() {
+            const searchTerm = document.getElementById('search-movements').value.toLowerCase();
+            const rows = document.querySelectorAll('#movements-table-body tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '--';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-AR') + ' ' + date.toLocaleTimeString('es-AR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function exportData() {
             const dataStr = JSON.stringify({
                 products: APP_STATE.products,
+                movements: APP_STATE.movements,
                 categories: APP_STATE.categories,
                 exportDate: new Date().toISOString(),
-                source: 'Google Sheets REAL',
-                spreadsheetId: SPREADSHEET_ID
+                source: 'Sistema Inventario Forrajería',
+                webAppUrl: WEB_APP_URL
             }, null, 2);
             
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `inventario_real_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `inventario_forrajeria_${new Date().toISOString().split('T')[0]}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1037,7 +1153,7 @@
             alert.className = 'alert alert-success alert-dismissible fade show';
             alert.innerHTML = `
                 <i class="fas fa-check-circle me-2"></i>
-                Datos REALES exportados exitosamente
+                Datos exportados exitosamente
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             document.querySelector('.main-content').insertBefore(alert, document.querySelector('.main-content').firstChild);
@@ -1050,7 +1166,7 @@
         // Actualizar automáticamente cada 2 minutos
         setInterval(() => {
             if (APP_STATE.isOnline) {
-                loadRealDataFromSheets();
+                loadDataFromSheets();
             }
         }, 120000);
 

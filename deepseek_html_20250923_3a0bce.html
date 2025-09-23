@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Control Pro | Sistema Real</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-dark: #1a365d;
+            --primary: #2d3748;
+            --primary-light: #4a5568;
+            --accent: #3182ce;
+            --accent-light: #4299e1;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --gray-50: #f7fafc;
+            --gray-100: #edf2f7;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e0;
+            --gray-700: #4a5568;
+            --gray-800: #2d3748;
+            --gray-900: #1a202c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border-left-color: var(--accent-light);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .header-title h2 {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-title p {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+        
+        .stat-card.success {
+            border-left-color: var(--success);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            background: rgba(49, 130, 206, 0.1);
+            color: var(--accent);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-panel, .alert-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .panel-title {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th {
+            background: var(--gray-50);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tr:hover {
+            background: var(--gray-50);
+        }
+        
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: rgba(56, 161, 105, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background: rgba(214, 158, 46, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-danger {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger);
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-light);
+            border-color: var(--accent-light);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .btn-outline:hover {
+            background: var(--gray-100);
+        }
+        
+        .alert-item {
+            padding: 1rem;
+            border-left: 4px solid var(--warning);
+            background: rgba(214, 158, 46, 0.05);
+            margin-bottom: 0.75rem;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .alert-item.critical {
+            border-left-color: var(--danger);
+            background: rgba(229, 62, 62, 0.05);
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-title i {
+            margin-right: 0.5rem;
+        }
+        
+        .alert-desc {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background-color: var(--success);
+        }
+        
+        .status-offline {
+            background-color: var(--danger);
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Inventory Control Pro</h1>
+                <p>Sistema Real - Datos en Tiempo Real</p>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Control Central</div>
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-dashboard"></i>
+                    Dashboard en Tiempo Real
+                </a>
+                <a href="#" class="nav-item" data-section="products">
+                    <i class="fas fa-boxes"></i>
+                    Productos Reales
+                </a>
+                <a href="#" class="nav-item" data-section="movements">
+                    <i class="fas fa-exchange-alt"></i>
+                    Movimientos Reales
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Conexión</div>
+                <a href="#" class="nav-item" id="sheets-status">
+                    <i class="fas fa-table"></i>
+                    Google Sheets
+                    <span class="status-indicator status-online"></span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1WZ8C9FlADPtHCddut35qCJWp_DJNz2IrZDmPIYIuFEw/edit" 
+                   target="_blank" class="nav-item">
+                    <i class="fas fa-external-link-alt"></i>
+                    Ver Planilla Completa
+                </a>
+            </div>
+            
+            <div class="nav-section mt-auto">
+                <div class="nav-item">
+                    <i class="fas fa-user-shield"></i>
+                    <div>
+                        <div>Admin Senior</div>
+                        <small>Datos Reales - Sin Simulación</small>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="main-header">
+                <div class="header-title">
+                    <h2>Panel de Control - Datos Reales</h2>
+                    <p>
+                        <span id="connection-status" class="badge badge-success">
+                            <i class="fas fa-check-circle"></i> Conectado a Google Sheets
+                        </span>
+                        <span class="ms-2 text-muted" id="last-update">Última actualización: --</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="btn-export">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                    <button class="btn btn-primary" id="btn-sync">
+                        <i class="fas fa-sync-alt"></i> Actualizar Ahora
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Indicadores de Carga -->
+            <div class="alert alert-info d-flex align-items-center" id="loading-indicator" style="display: none !important;">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                <span>Cargando datos REALES desde Google Sheets...</span>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <!-- Estadísticas Rápidas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-value" id="total-products">--</div>
+                        <div class="stat-label">Total de Productos REALES</div>
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-value" id="critical-stock">--</div>
+                        <div class="stat-label">Stock Crítico REAL</div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="stat-value" id="total-value">$--</div>
+                        <div class="stat-label">Valor Total REAL</div>
+                    </div>
+                    
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="stat-value" id="total-categories">--</div>
+                        <div class="stat-label">Categorías ACTIVAS</div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos y Alertas -->
+                <div class="dashboard-grid">
+                    <div class="chart-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Distribución por Categorías (REAL)</h3>
+                        </div>
+                        <div>
+                            <canvas id="categoryChart" height="250"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">Alertas de Stock REALES</h3>
+                            <span class="badge badge-danger" id="critical-alerts-count">0 críticas</span>
+                        </div>
+                        <div id="alerts-container">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Cargando alertas reales desde Google Sheets...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabla de Productos REALES -->
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3 class="panel-title mb-0">Productos REALES de la Forrajería</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control form-control-sm" id="search-products" placeholder="Buscar producto real...">
+                            <button class="btn btn-outline btn-sm" id="btn-refresh-data">
+                                <i class="fas fa-redo"></i> Refrescar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Mínimo</th>
+                                    <th>Categoría</th>
+                                    <th>Proveedor</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr>
+                                    <td colspan="9" class="text-center py-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Cargando datos reales...</span>
+                                        </div>
+                                        <div class="mt-2">Cargando datos REALES desde Google Sheets...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =============================================
+        // CONFIGURACIÓN PRINCIPAL - DATOS REALES
+        // =============================================
+        
+        // ID de tu planilla de Google Sheets REAL
+        const SPREADSHEET_ID = '1WZ8C9FlADPtHCddut35qCJWp_DJNz2IrZDmPIYIuFEw';
+        
+        // Estado de la aplicación
+        const APP_STATE = {
+            products: [],
+            categories: [],
+            lastUpdate: null,
+            charts: {},
+            isOnline: false
+        };
+
+        // =============================================
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        // =============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando Sistema con Datos REALES');
+            console.log('📊 Planilla REAL:', SPREADSHEET_ID);
+            
+            initializeApp();
+            setupEventListeners();
+            loadRealDataFromSheets(); // Cargar datos REALES inmediatamente
+        });
+
+        function initializeApp() {
+            // Inicializar gráficos
+            initializeCharts();
+        }
+
+        function setupEventListeners() {
+            // Botón de sincronización
+            document.getElementById('btn-sync').addEventListener('click', loadRealDataFromSheets);
+            document.getElementById('btn-refresh-data').addEventListener('click', loadRealDataFromSheets);
+            
+            // Botón de exportación
+            document.getElementById('btn-export').addEventListener('click', exportRealData);
+            
+            // Búsqueda de productos
+            document.getElementById('search-products').addEventListener('input', filterRealProducts);
+        }
+
+        // =============================================
+        // CONEXIÓN DIRECTA CON GOOGLE SHEETS - DATOS REALES
+        // =============================================
+
+        async function loadRealDataFromSheets() {
+            showLoading(true);
+            
+            try {
+                console.log('📥 Conectando con Google Sheets para datos REALES...');
+                
+                // Cargar datos REALES directamente desde Google Sheets
+                const productsData = await fetchRealSheetData('Productos');
+                APP_STATE.products = processRealProductsData(productsData);
+                APP_STATE.categories = extractRealCategories(APP_STATE.products);
+                
+                APP_STATE.lastUpdate = new Date();
+                APP_STATE.isOnline = true;
+                
+                updateRealUI();
+                updateRealCharts();
+                showLoading(false);
+                
+                console.log('✅ Datos REALES cargados exitosamente');
+                console.log('📦 Productos REALES:', APP_STATE.products.length);
+                console.log('🏷️ Categorías REALES:', APP_STATE.categories.length);
+                
+            } catch (error) {
+                console.error('❌ Error al cargar datos REALES:', error);
+                APP_STATE.isOnline = false;
+                showError('Error de conexión con Google Sheets: ' + error.message);
+                showLoading(false);
+            }
+        }
+
+        async function fetchRealSheetData(sheetName) {
+            // Usar la API de Google Sheets para obtener datos REALES
+            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?sheet=${sheetName}&tqx=out:json`;
+            
+            console.log(`📡 Solicitando datos REALES de: ${sheetName}`);
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                const jsonStart = text.indexOf('{');
+                const jsonEnd = text.lastIndexOf('}') + 1;
+                const jsonText = text.substring(jsonStart, jsonEnd);
+                
+                const data = JSON.parse(jsonText);
+                console.log('📊 Datos REALES obtenidos:', data);
+                
+                return convertRealSheetsData(data);
+            } catch (error) {
+                console.error('❌ Error fetching real data:', error);
+                throw new Error('No se pudieron cargar los datos REALES de Google Sheets');
+            }
+        }
+
+        function convertRealSheetsData(data) {
+            // Convertir la estructura compleja de Google Sheets a un formato simple
+            if (!data || !data.table || !data.table.rows) {
+                throw new Error('Formato de datos REALES no reconocido');
+            }
+            
+            const rows = [];
+            data.table.rows.forEach((row, rowIndex) => {
+                const rowData = [];
+                if (row.c) {
+                    row.c.forEach((cell, cellIndex) => {
+                        // Extraer el valor real de la celda
+                        let value = '';
+                        if (cell) {
+                            if (cell.v !== null && cell.v !== undefined) {
+                                value = cell.v;
+                            } else if (cell.f) {
+                                value = cell.f; // Fórmulas
+                            }
+                        }
+                        rowData.push(value);
+                    });
+                }
+                rows.push(rowData);
+            });
+            
+            console.log('📋 Datos REALES convertidos:', rows);
+            return rows;
+        }
+
+        function processRealProductsData(data) {
+            console.log('🔧 Procesando datos REALES de productos...');
+            
+            if (!Array.isArray(data)) {
+                console.error('❌ Error: datos REALES no son un array', data);
+                return [];
+            }
+            
+            // Encontrar la fila de encabezados
+            let startIndex = 0;
+            if (data.length > 0) {
+                const firstRow = data[0];
+                const hasHeaders = firstRow.some(cell => 
+                    typeof cell === 'string' && 
+                    (cell.includes('ID') || cell.includes('Nombre') || cell.includes('Precio'))
+                );
+                
+                if (hasHeaders) {
+                    startIndex = 1;
+                    console.log('📑 Encabezados detectados, empezando desde fila:', startIndex);
+                }
+            }
+            
+            const realProducts = [];
+            
+            for (let i = startIndex; i < data.length; i++) {
+                const row = data[i];
+                if (!row || row.length === 0) continue;
+                
+                // Asegurar que la fila tenga al menos 8 columnas
+                const fullRow = [...row];
+                while (fullRow.length < 8) fullRow.push('');
+                
+                const product = {
+                    id: fullRow[0] || `AUTO-${i}`,
+                    name: fullRow[1] || 'Producto sin nombre',
+                    description: fullRow[2] || '',
+                    price: parseFloat(fullRow[3]) || 0,
+                    stock: parseInt(fullRow[4]) || 0,
+                    minStock: parseInt(fullRow[5]) || 0,
+                    category: fullRow[6] || 'Sin categoría',
+                    provider: fullRow[7] || 'Sin proveedor'
+                };
+                
+                // Solo agregar productos válidos
+                if (product.name !== 'Producto sin nombre' && product.id !== 'AUTO-${i}') {
+                    realProducts.push(product);
+                }
+            }
+            
+            console.log('✅ Productos REALES procesados:', realProducts.length);
+            return realProducts;
+        }
+
+        function extractRealCategories(products) {
+            const categories = {};
+            products.forEach(product => {
+                if (product.category && product.category.trim() !== '') {
+                    if (!categories[product.category]) {
+                        categories[product.category] = 0;
+                    }
+                    categories[product.category]++;
+                }
+            });
+            
+            return Object.entries(categories).map(([name, count]) => ({
+                name: name,
+                count: count,
+                totalValue: products
+                    .filter(p => p.category === name)
+                    .reduce((sum, p) => sum + (p.price * p.stock), 0)
+            }));
+        }
+
+        // =============================================
+        // ACTUALIZACIÓN DE LA INTERFAZ CON DATOS REALES
+        // =============================================
+
+        function updateRealUI() {
+            // Actualizar estadísticas principales con datos REALES
+            document.getElementById('total-products').textContent = APP_STATE.products.length;
+            
+            const criticalProducts = APP_STATE.products.filter(p => p.stock <= p.minStock);
+            document.getElementById('critical-stock').textContent = criticalProducts.length;
+            
+            const totalValue = APP_STATE.products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+            document.getElementById('total-value').textContent = '$' + totalValue.toLocaleString('es-AR');
+            
+            document.getElementById('total-categories').textContent = APP_STATE.categories.length;
+            
+            // Actualizar contador de alertas REALES
+            const criticalAlerts = APP_STATE.products.filter(p => p.stock <= p.minStock);
+            document.getElementById('alerts-count').textContent = criticalAlerts.length;
+            document.getElementById('critical-alerts-count').textContent = 
+                criticalAlerts.filter(p => p.stock <= p.minStock * 0.5).length + ' críticas';
+            
+            // Actualizar última sincronización
+            document.getElementById('last-update').textContent = 
+                `Última actualización REAL: ${APP_STATE.lastUpdate.toLocaleTimeString()}`;
+            
+            // Actualizar estado de conexión
+            const statusElement = document.getElementById('connection-status');
+            const sheetsStatus = document.getElementById('sheets-status');
+            
+            if (APP_STATE.isOnline) {
+                statusElement.className = 'badge badge-success';
+                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Datos REALES cargados';
+                sheetsStatus.querySelector('.status-indicator').className = 'status-indicator status-online';
+            } else {
+                statusElement.className = 'badge badge-danger';
+                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error de conexión';
+                sheetsStatus.querySelector('.status-indicator').className = 'status-indicator status-offline';
+            }
+            
+            // Actualizar tabla de productos REALES
+            updateRealProductsTable();
+            
+            // Actualizar alertas REALES
+            updateRealAlerts();
+        }
+
+        function updateRealProductsTable() {
+            const tbody = document.getElementById('products-table-body');
+            
+            if (APP_STATE.products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted">No hay productos REALES en la planilla</td></tr>';
+                return;
+            }
+            
+            // Ordenar por stock crítico primero
+            const sortedProducts = [...APP_STATE.products].sort((a, b) => {
+                const aCritical = a.stock <= a.minStock;
+                const bCritical = b.stock <= b.minStock;
+                if (aCritical && !bCritical) return -1;
+                if (!aCritical && bCritical) return 1;
+                return a.stock - b.stock;
+            });
+            
+            tbody.innerHTML = sortedProducts.map(product => {
+                const isCritical = product.stock <= product.minStock;
+                const isVeryCritical = product.stock <= product.minStock * 0.5;
+                
+                return `
+                    <tr>
+                        <td class="fw-bold">${product.id}</td>
+                        <td class="fw-bold">${product.name}</td>
+                        <td>${product.description || '--'}</td>
+                        <td>$${product.price.toFixed(2)}</td>
+                        <td class="${isCritical ? 'fw-bold text-danger' : ''}">${product.stock}</td>
+                        <td>${product.minStock}</td>
+                        <td>${product.category}</td>
+                        <td>${product.provider}</td>
+                        <td>
+                            <span class="badge ${isVeryCritical ? 'badge-danger' : isCritical ? 'badge-warning' : 'badge-success'}">
+                                ${isVeryCritical ? 'CRÍTICO' : isCritical ? 'BAJO' : 'NORMAL'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateRealAlerts() {
+            const container = document.getElementById('alerts-container');
+            const criticalProducts = APP_STATE.products.filter(p => p.stock <= p.minStock);
+            
+            if (criticalProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        ¡Excelente! No hay productos con stock crítico REAL.
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar por gravedad
+            const sortedAlerts = criticalProducts.sort((a, b) => {
+                const aSeverity = a.stock / a.minStock;
+                const bSeverity = b.stock / b.minStock;
+                return aSeverity - bSeverity;
+            });
+            
+            container.innerHTML = sortedAlerts.map(product => {
+                const severity = product.stock <= product.minStock * 0.5 ? 'critical' : 'warning';
+                
+                return `
+                    <div class="alert-item ${severity}">
+                        <div class="alert-title">
+                            <i class="fas fa-${severity === 'critical' ? 'exclamation-circle' : 'exclamation-triangle'}"></i>
+                            ${product.name}
+                        </div>
+                        <div class="alert-desc">
+                            Stock: ${product.stock} unidades (Mínimo: ${product.minStock}) | 
+                            Categoría: ${product.category} | 
+                            Proveedor: ${product.provider}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // =============================================
+        // GRÁFICOS CON DATOS REALES
+        // =============================================
+
+        function initializeCharts() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            APP_STATE.charts.category = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribución de Productos por Categoría',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} productos (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateRealCharts() {
+            if (!APP_STATE.charts.category) return;
+            
+            const categoryData = APP_STATE.categories;
+            
+            APP_STATE.charts.category.data.labels = categoryData.map(cat => cat.name);
+            APP_STATE.charts.category.data.datasets[0].data = categoryData.map(cat => cat.count);
+            APP_STATE.charts.category.update();
+        }
+
+        // =============================================
+        // FUNCIONALIDADES DE INTERFAZ
+        // =============================================
+
+        function showLoading(show) {
+            const indicator = document.getElementById('loading-indicator');
+            const appContainer = document.querySelector('.app-container');
+            
+            if (show) {
+                indicator.style.display = 'flex';
+                appContainer.classList.add('loading');
+            } else {
+                indicator.style.display = 'none';
+                appContainer.classList.remove('loading');
+            }
+        }
+
+        function showError(message) {
+            // Eliminar alertas anteriores
+            document.querySelectorAll('.alert.alert-danger').forEach(alert => alert.remove());
+            
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger alert-dismissible fade show';
+            alert.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Error:</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.main-content').insertBefore(alert, document.querySelector('.main-content').firstChild);
+        }
+
+        function filterRealProducts() {
+            const searchTerm = document.getElementById('search-products').value.toLowerCase();
+            const rows = document.querySelectorAll('#products-table-body tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function exportRealData() {
+            const dataStr = JSON.stringify({
+                products: APP_STATE.products,
+                categories: APP_STATE.categories,
+                exportDate: new Date().toISOString(),
+                source: 'Google Sheets REAL',
+                spreadsheetId: SPREADSHEET_ID
+            }, null, 2);
+            
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `inventario_real_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Mostrar confirmación
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success alert-dismissible fade show';
+            alert.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                Datos REALES exportados exitosamente
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.querySelector('.main-content').insertBefore(alert, document.querySelector('.main-content').firstChild);
+        }
+
+        // =============================================
+        // INICIALIZACIÓN AUTOMÁTICA
+        // =============================================
+        
+        // Actualizar automáticamente cada 2 minutos
+        setInterval(() => {
+            if (APP_STATE.isOnline) {
+                loadRealDataFromSheets();
+            }
+        }, 120000);
+
+    </script>
+</body>
+</html>

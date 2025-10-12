@@ -221,6 +221,8 @@
       left: -300px;
       width: 280px;
       height: 100%;
+       background: rgba(var(--bg-nav-rgb), 0.98);  /* Agregar transparencia */
+  backdrop-filter: blur(10px);  /* Agregar efecto de desenfoque */
       background: var(--bg-nav);
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
       z-index: 1100;
@@ -276,25 +278,46 @@
       transform: translateY(-50%) rotate(180deg);
     }
 
-    .mobile-menu .submenu {
-      display: none;
-      position: static;
-      box-shadow: none;
-      background: var(--accent-light);
-      border: none;
-      border-top: 1px solid var(--line-color);
-    }
+    /* Nuevo estilo para submenús en móviles - despliegue vertical */
+.mobile-menu .submenu {
+  display: none;
+  background: rgba(var(--accent-light-rgb), 0.3); /* Fondo sutil */
+  border-left: 3px solid var(--accent-color);
+  margin: 0 15px 10px 15px;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
 
-    .mobile-menu .menu-item.active .submenu {
-      display: block;
-    }
+.mobile-menu .menu-item.active .submenu {
+  display: block;
+}
 
-    .mobile-menu .submenu a {
-      padding-left: 40px;
-      font-size: 0.95rem;
-      min-height: 45px;
-    }
+.mobile-menu .submenu a {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  min-height: auto;
+  border-bottom: 1px solid rgba(var(--line-color-rgb), 0.3);
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
 
+.mobile-menu .submenu a:last-child {
+  border-bottom: none;
+}
+
+/* Animación para el despliegue */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+  }
+}
     .overlay {
       position: fixed;
       top: 0;

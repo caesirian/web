@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coco Querandí - Comunidad Cannábica del Oeste</title>
+  <link rel="icon" href="logo.png" />
+  <style>
+    :root {
+      /* Colores para modo claro */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-header: #2e7d32;
+      --bg-nav: #4caf50;
+      --text-primary: #212529;
+      --text-secondary: #495057;
+      --text-light: #6c757d;
+      --accent-color: #388e3c;
+      --accent-light: #c8e6c9;
+      --border-color: #dee2e6;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Colores para modo oscuro */
+        --bg-primary: #121212;
+        --bg-secondary: #1e1e1e;
+        --bg-header: #1b5e20;
+        --bg-nav: #2e7d32;
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0b0;
+        --text-light: #8a8a8a;
+        --accent-color: #4caf50;
+        --accent-light: #1b5e20;
+        --border-color: #333333;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      background: var(--bg-header);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      height: 60px;
+      margin-right: 15px;
+    }
+
+    .logo-text {
+      color: white;
+    }
+
+    .logo-text h1 {
+      font-size: 1.3rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .logo-text p {
+      font-size: 0.9rem;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    /* Botón hamburguesa */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    /* Menú de navegación */
+    nav {
+      background: var(--bg-nav);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      transition: max-height 0.3s ease-out;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: 0.3s;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    nav a.active {
+      background: rgba(255, 255, 255, 0.25);
+      font-weight: 600;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 30px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .article {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--border-color);
+    }
+
+    .article:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .article img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .article-content {
+      padding: 20px;
+    }
+
+    .article h2 {
+      color: var(--accent-color);
+      font-size: 1.3rem;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .article h3 {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .article p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    footer {
+      background: var(--bg-header);
+      color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      padding: 25px 20px;
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    /* Estilos para contenido cargado */
+    .content-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .content-section h2 {
+      color: var(--accent-color);
+      border-bottom: 2px solid var(--accent-light);
+      padding-bottom: 10px;
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+    }
+
+    .content-section h3 {
+      color: var(--accent-color);
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .content-section p {
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .content-section ul, .content-section ol {
+      padding-left: 25px;
+      margin-bottom: 25px;
+    }
+
+    .content-section li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .content-section .highlight {
+      background: var(--accent-light);
+      padding: 20px;
+      border-left: 4px solid var(--accent-color);
+      margin: 25px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .content-section .highlight p {
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .content-section .highlight strong {
+      color: var(--accent-color);
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+      .logo-text h1 {
+        font-size: 1.1rem;
+      }
+      
+      .logo-text p {
+        font-size: 0.8rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      nav {
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      nav.active {
+        max-height: 500px;
+      }
+
+      nav a {
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px;
+      }
+      
+      .content-section {
+        padding: 20px 15px;
+      }
+      
+      .content-section h2 {
+        font-size: 1.5rem;
+      }
+      
+      .content-section h3 {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 10px 15px;
+      }
+      
+      header img {
+        height: 50px;
+      }
+      
+      .container {
+        grid-template-columns: 1fr;
+        padding: 20px 15px;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo Coco Querandí" />
+      <div class="logo-text">
+        <h1>Coco Querandí</h1>
+        <p>Comunidad Cannábica del Oeste</p>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <nav id="nav">
+    <a href="#" data-page="index" class="active">Inicio</a>
+    <a href="#" data-page="tips">Tips de Cultivo</a>
+    <a href="#" data-page="tecnicas">Técnicas</a>
+    <a href="#" data-page="ciencia">Ciencia y Extracciones</a>
+    <a href="#" data-page="derivados">Derivados</a>
+    <a href="#" data-page="articulos">Artículos Periodísticos</a>
+    <a href="#" data-page="resenas">Reseñas de Usuarios</a>
+    <a href="#" data-page="territorio">Territorio y Organización</a>
+    <a href="#" data-page="legislacion">Legislación</a>
+    <a href="#" data-page="contacto">Contacto</a>
+  </nav>
+
+  <main id="main-content">
+    <!-- Contenido se cargará aquí dinámicamente -->
+    <section class="container" id="articulos">
+      <p>Cargando artículos...</p>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Coco Querandí - Comunidad Cannábica del Oeste · Todos los derechos reservados
+  </footer>
+
+  <!-- Contenido de ejemplo para cuando no se encuentren los archivos -->
+  <template id="tips-content">
+    <div class="content-section">
+      <h2>Tips de Cultivo</h2>
+      <p>Consejos prácticos para el cultivo responsable y efectivo de cannabis medicinal y recreativo.</p>
+      
+      <h3>Selección de Semillas</h3>
+      <p>La elección de las semillas es fundamental para un cultivo exitoso. Considera factores como:</p>
+      <ul>
+        <li><strong>Genética adecuada</strong> para tu clima y espacio de cultivo</li>
+        <li><strong>Resistencia a plagas y enfermedades</strong> para reducir problemas</li>
+        <li><strong>Tiempo de floración</strong> según tu disponibilidad</li>
+        <li><strong>Efectos deseados</strong> (relajación, energía, creatividad, etc.)</li>
+      </ul>
+      
+      <h3>Iluminación</h3>
+      <p>La luz es uno de los factores más importantes en el cultivo de cannabis:</p>
+      <div class="highlight">
+        <p><strong>Consejo profesional:</strong> Las plantas necesitan al menos 18 horas de luz durante la etapa vegetativa y 12 horas durante la floración para un desarrollo óptimo.</p>
+      </div>
+      
+      <h3>Riego y Nutrientes</h3>
+      <p>El riego adecuado es crucial para evitar problemas como hongos o deficiencias nutricionales:</p>
+      <ul>
+        <li>Riega cuando el sustrato esté seco al tacto (primeros 2-3 cm)</li>
+        <li>Usa agua con pH equilibrado (6.0-6.5 para suelo, 5.5-6.0 para hidroponía)</li>
+        <li>Proporciona nutrientes específicos para cada etapa de crecimiento</li>
+        <li>Evita el exceso de fertilizantes que puede "quemar" las plantas</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="tecnicas-content">
+    <div class="content-section">
+      <h2>Técnicas de Cultivo</h2>
+      <p>Explora diferentes métodos para optimizar tu cultivo de cannabis según tus necesidades y recursos.</p>
+      
+      <h3>Suelo Vivo</h3>
+      <p>El método de suelo vivo imita los ecosistemas naturales, creando un entorno rico en microorganismos beneficiosos que trabajan en simbiosis con las raíces.</p>
+      <ul>
+        <li>Mezcla de sustrato orgánico con compost y humus de lombriz</li>
+        <li>Incorporación de microorganismos beneficiosos (micorrizas, trichodermas)</li>
+        <li>Uso de minerales naturales como harina de rocas y zeolita</li>
+        <li>Fertilización con té de compost y otros preparados naturales</li>
+      </ul>
+      
+      <h3>Hidroponía</h3>
+      <p>Cultivo sin suelo donde las raíces reciben una solución nutritiva equilibrada disuelta en agua con oxigenación constante.</p>
+      <div class="highlight">
+        <p><strong>Ventaja principal:</strong> Mayor control sobre los nutrientes y crecimiento más rápido con cosechas más abundantes.</p>
+      </div>
+      <p>Sistemas hidropónicos comunes:</p>
+      <ul>
+        <li>Sistema de mecha (wick system)</li>
+        <li>Cultura de aguas profundas (DWC)</li>
+        <li>Sistema de flujo y reflujo (Ebb & Flow)</li>
+        <li>Técnica de película nutritiva (NFT)</li>
+      </ul>
+      
+      <h3>Cultivo en Coco</h3>
+      <p>La fibra de coco es un medio de cultivo versátil que combina características del suelo y la hidroponía, ofreciendo excelentes resultados.</p>
+      <ul>
+        <li>Excelente aireación para las raíces, evitando problemas de oxigenación</li>
+        <li>Retención de humedad equilibrada que permite mayor margen de error en el riego</li>
+        <li>Requiere nutrientes específicos para coco, con mayor necesidad de calcio y magnesio</li>
+        <li>pH ligeramente ácido (5.8-6.2) para una óptima absorción de nutrientes</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="derivados-content">
+    <div class="content-section">
+      <h2>Elaboración de Derivados</h2>
+      <p>Aprende a transformar tu cosecha en diferentes productos cannábicos para diversos usos y preferencias.</p>
+      
+      <h3>Extracciones</h3>
+      <p>Métodos para concentrar los cannabinoides y terpenos de la planta, obteniendo productos de mayor potencia:</p>
+      <ul>
+        <li><strong>Extracción con hielo seco</strong> (bubble hash) - Método físico sin solventes</li>
+        <li><strong>Extracción con solventes</strong> (butano, etanol) - Para obtener shatter, wax y otros concentrados</li>
+        <li><strong>Extracción con CO2 supercrítico</strong> - Método profesional de alta pureza</li>
+        <li><strong>Rosin</strong> (prensado en caliente) - Técnica sencilla y segura sin solventes</li>
+      </ul>
+      
+      <h3>Comestibles</h3>
+      <p>Preparación de alimentos infusionados con cannabis para una experiencia diferente al consumo por inhalación:</p>
+      <div class="highlight">
+        <p><strong>Importante:</strong> La descarboxilación es esencial para activar los cannabinoides antes de su consumo oral. Sin este paso, los efectos serán mínimos.</p>
+      </div>
+      <ul>
+        <li>Mantequilla cannábica (cannabutter) - Base para múltiples recetas</li>
+        <li>Aceites infusionados (oliva, coco) - Versátiles para cocina y uso tópico</li>
+        <li>Bebidas y tinturas - Para dosificación precisa y discreta</li>
+        <li>Dulces y chocolates - Opciones populares y sabrosas</li>
+      </ul>
+      
+      <h3>Productos Tópicos</h3>
+      <p>Creación de productos para aplicación cutánea, ideales para alivio localizado sin efectos psicoactivos:</p>
+      <ul>
+        <li>Crema y pomadas analgésicas - Para dolores musculares y articulares</li>
+        <li>Aceites de masaje - Combinan relajación con beneficios cannábicos</li>
+        <li>Bálsamos labiales - Hidratación con cannabinoides</li>
+        <li>Parches transdérmicos - Liberación prolongada de cannabinoides</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="territorio-content">
+    <div class="content-section">
+      <h2>Trabajo Territorial y Organización</h2>
+      <p>La unión hace la fuerza: construyendo comunidad cannábica en el Oeste del Gran Buenos Aires.</p>
+      
+      <h3>Nuestra Misión</h3>
+      <p>Promover la organización comunitaria para el autocultivo responsable, el acceso seguro al cannabis terapéutico y la defensa de los derechos de los usuarios.</p>
+      
+      <h3>Actividades Comunitarias</h3>
+      <ul>
+        <li><strong>Talleres de cultivo colectivo</strong> - Aprendizaje práctico y colaborativo</li>
+        <li><strong>Intercambio de semillas y esquejes</strong> - Diversificación genética comunitaria</li>
+        <li><strong>Asesoramiento legal gratuito</strong> - Conocimiento de derechos y obligaciones</li>
+        <li><strong>Jornadas de extracción segura</strong> - Prácticas responsables para elaborar derivados</li>
+        <li><strong>Encuentros informativos</strong> - Actualización sobre avances legales y científicos</li>
+      </ul>
+      
+      <div class="highlight">
+        <p><strong>Próximo evento:</strong> Este sábado 15 de junio, jornada de intercambio de semillas y taller de preparación de sustratos para cultivo orgánico.</p>
+      </div>
+      
+      <h3>Unión de Agrupaciones</h3>
+      <p>Trabajamos en red con otras organizaciones cannábicas de la zona para:</p>
+      <ul>
+        <li>Fortalecer el movimiento activista a nivel regional y nacional</li>
+        <li>Compartir conocimientos, experiencias y recursos entre colectivos</li>
+        <li>Coordinar acciones de incidencia política para mejorar el marco legal</li>
+        <li>Organizar eventos regionales que visibilicen nuestra causa</li>
+        <li>Establecer alianzas con profesionales de la salud e investigadores</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="legislacion-content">
+    <div class="content-section">
+      <h2>Legislación Actual</h2>
+      <p>Conoce el marco legal que regula el uso del cannabis en Argentina y los derechos de los usuarios.</p>
+      
+      <h3>Ley 27.350 - Uso Medicinal del Cannabis</h3>
+      <p>Esta ley, sancionada en 2017, regula la investigación médica y científica del uso medicinal de la planta de cannabis y sus derivados, creando el marco para el acceso a tratamientos con cannabis.</p>
+      
+      <h3>Autocultivo Regulado</h3>
+      <p>El REPROCANN (Registro del Programa de Cannabis) permite el autocultivo para pacientes con indicación médica, estableciendo un registro de cultivadores y usuarios.</p>
+      <ul>
+        <li>Inscripción en el registro nacional con certificación médica</li>
+        <li>Cultivo controlado para uso personal con límites de plantas</li>
+        <li>Portación de cannabis para tratamiento con documentación correspondiente</li>
+        <li>Acceso a aceites y derivados de producción pública</li>
+      </ul>
+      
+      <div class="highlight">
+        <p><strong>Actualización importante:</strong> Recientes fallos judiciales han ampliado los derechos de los usuarios de cannabis medicinal, reconociendo el autocultivo como una vía legítima de acceso.</p>
+      </div>
+      
+      <h3>Proyectos en Discusión</h3>
+      <p>Actualmente se debaten en el Congreso varias iniciativas para ampliar y mejorar la regulación existente:</p>
+      <ul>
+        <li>Regular el autocultivo solidario y los clubes de cultivo</li>
+        <li>Permitir la venta en farmacias de productos cannábicos estandarizados</li>
+        <li>Despenalizar el consumo recreativo con regulación similar al alcohol</li>
+        <li>Fomentar la industria nacional del cannabis con fines medicinales e industriales</li>
+        <li>Establecer programas de investigación en universidades públicas</li>
+      </ul>
+    </div>
+  </template>
+
+  <template id="default-content">
+    <div class="content-section">
+      <h2>Contenido en Desarrollo</h2>
+      <p>Estamos trabajando para ofrecerte el mejor contenido sobre este tema. Mientras tanto, aquí tienes información general sobre nuestra comunidad:</p>
+      
+      <h3>Sobre Coco Querandí</h3>
+      <p>Coco Querandí es una comunidad cannábica ubicada en el Oeste del Gran Buenos Aires, dedicada a promover el cultivo responsable, la educación sobre el cannabis y la defensa de los derechos de los usuarios.</p>
+      
+      <div class="highlight">
+        <p><strong>Nuestro compromiso:</strong> Trabajamos para crear una comunidad informada, responsable y unida que pueda acceder a los beneficios del cannabis de manera segura y legal.</p>
+      </div>
+      
+      <h3>¿Qué ofrecemos?</h3>
+      <p>Nuestra comunidad se centra en varios pilares fundamentales:</p>
+      <ul>
+        <li>Educación sobre cultivo y uso responsable del cannabis</li>
+        <li>Asesoramiento legal sobre derechos y obligaciones</li>
+        <li>Espacios de encuentro e intercambio entre usuarios</li>
+        <li>Difusión de información científica actualizada</li>
+        <li>Activismo para mejorar el marco legal vigente</li>
+      </ul>
+      
+      <p>Volveremos pronto con contenido específico sobre este tema. ¡Gracias por tu paciencia y interés en nuestra comunidad!</p>
+    </div>
+  </template>
+
+  <script>
+    // Funcionalidad del menú hamburguesa
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('nav');
+    const mainContent = document.getElementById('main-content');
+    const navLinks = document.querySelectorAll('nav a');
+
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      
+      // Animación del botón hamburguesa a X
+      const spans = hamburger.querySelectorAll('span');
+      if (nav.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+      } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      }
+    });
+
+    // Cargar contenido según la página seleccionada
+    function loadContent(page) {
+      // Actualizar clase activa en el menú
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-page') === page) {
+          link.classList.add('active');
+        }
+      });
+
+      // Si es la página de inicio, cargar artículos
+      if (page === 'index') {
+        loadArticles();
+        return;
+      }
+
+      // Intentar cargar el archivo externo
+      fetch(`${page}.html`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Archivo no encontrado');
+          }
+          return response.text();
+        })
+        .then(html => {
+          mainContent.innerHTML = html;
+        })
+        .catch(error => {
+          // Si no se encuentra el archivo, cargar contenido de ejemplo
+          console.log(`No se encontró ${page}.html, cargando contenido de ejemplo`);
+          const template = document.getElementById(`${page}-content`) || document.getElementById('default-content');
+          const clone = document.importNode(template.content, true);
+          mainContent.innerHTML = '';
+          mainContent.appendChild(clone);
+        });
+    }
+
+    // Cargar artículos desde Google Sheets
+    function loadArticles() {
+      const sheetID = "TU_ID_DE_HOJA_AQUI";
+      const sheetName = "Articulos";
+      const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          const container = document.createElement('div');
+          container.className = 'container';
+          container.id = 'articulos';
+          
+          data.forEach((art) => {
+            const div = document.createElement("div");
+            div.className = "article";
+            div.innerHTML = `
+              <img src="${art.Imagen}" alt="${art.Titulo}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlOGU4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBlbmNvbnRyYWRhPC90ZXh0Pjwvc3ZnPg=='">
+              <div class="article-content">
+                <h2>${art.Titulo}</h2>
+                <h3>${art.Subtitulo}</h3>
+                <p>${art.Texto}</p>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+          
+          mainContent.innerHTML = '';
+          mainContent.appendChild(container);
+        })
+        .catch(() => {
+          mainContent.innerHTML = '<section class="container" id="articulos"><p>Error al cargar los artículos. Verifica la hoja de cálculo.</p></section>';
+        });
+    }
+
+    // Configurar eventos para los enlaces del menú
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = link.getAttribute('data-page');
+        loadContent(page);
+        
+        // Cerrar menú en dispositivos móviles
+        if (window.innerWidth <= 768) {
+          nav.classList.remove('active');
+          const spans = hamburger.querySelectorAll('span');
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        }
+      });
+    });
+
+    // Cargar contenido inicial (página de inicio)
+    loadContent('index');
+  </script>
+</body>
+</html>

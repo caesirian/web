@@ -134,6 +134,52 @@
       font-weight: 600;
     }
 
+    /* Estilos para menú con submenús */
+    .menu-item {
+      position: relative;
+    }
+
+    .menu-toggle {
+      position: relative;
+      padding-right: 25px !important;
+    }
+
+    .menu-toggle::after {
+      content: "▼";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      transition: transform 0.3s;
+    }
+
+    .menu-item.active .menu-toggle::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-nav);
+      min-width: 200px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .menu-item.active .submenu {
+      display: block;
+    }
+
+    .submenu a {
+      display: block;
+      padding: 10px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+
     /* Menú móvil flotante */
     .mobile-menu {
       position: fixed;
@@ -164,6 +210,46 @@
 
     .mobile-menu a:hover {
       background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Estilos para submenús en móviles */
+    .mobile-menu .menu-item {
+      position: relative;
+    }
+
+    .mobile-menu .menu-toggle {
+      position: relative;
+      padding-right: 40px !important;
+    }
+
+    .mobile-menu .menu-toggle::after {
+      content: "▼";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      transition: transform 0.3s;
+    }
+
+    .mobile-menu .menu-item.active .menu-toggle::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .mobile-menu .submenu {
+      display: none;
+      position: static;
+      box-shadow: none;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .mobile-menu .menu-item.active .submenu {
+      display: block;
+    }
+
+    .mobile-menu .submenu a {
+      padding-left: 40px;
+      font-size: 0.9rem;
     }
 
     .overlay {
@@ -344,6 +430,10 @@
         display: block;
       }
       
+      header img {
+        height: 65px;
+      }
+      
       .content-section {
         padding: 20px 15px;
       }
@@ -360,10 +450,6 @@
     @media (max-width: 480px) {
       header {
         padding: 10px 15px;
-      }
-      
-      header img {
-        height: 50px;
       }
       
       .container {
@@ -397,28 +483,114 @@
 
   <nav id="nav">
     <a href="#" data-page="index" class="active">Inicio</a>
-    <a href="#" data-page="tips">Tips de Cultivo</a>
-    <a href="#" data-page="tecnicas">Técnicas</a>
-    <a href="#" data-page="ciencia">Ciencia y Extracciones</a>
-    <a href="#" data-page="derivados">Derivados</a>
-    <a href="#" data-page="articulos">Artículos Periodísticos</a>
-    <a href="#" data-page="resenas">Reseñas de Usuarios</a>
-    <a href="#" data-page="territorio">Territorio y Organización</a>
-    <a href="#" data-page="legislacion">Legislación</a>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Cultivo</a>
+      <div class="submenu">
+        <a href="#" data-page="tips">Tips de Cultivo</a>
+        <a href="#" data-page="tecnicas">Técnicas Generales</a>
+        <a href="#" data-page="sustratos">Sustratos</a>
+        <a href="#" data-page="nutricion">Nutrición</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Técnicas</a>
+      <div class="submenu">
+        <a href="#" data-page="hidroponia">Hidroponía</a>
+        <a href="#" data-page="coco">Cultivo en Coco</a>
+        <a href="#" data-page="suelo-vivo">Suelo Vivo</a>
+        <a href="#" data-page="organico">Orgánico</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Ciencia</a>
+      <div class="submenu">
+        <a href="#" data-page="extracciones">Extracciones</a>
+        <a href="#" data-page="derivados">Derivados</a>
+        <a href="#" data-page="investigacion">Investigación</a>
+        <a href="#" data-page="analisis">Análisis de Cannabinoides</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Comunidad</a>
+      <div class="submenu">
+        <a href="#" data-page="articulos">Artículos</a>
+        <a href="#" data-page="resenas">Reseñas</a>
+        <a href="#" data-page="territorio">Trabajo Territorial</a>
+        <a href="#" data-page="eventos">Eventos</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Legislación</a>
+      <div class="submenu">
+        <a href="#" data-page="ley-actual">Ley Actual</a>
+        <a href="#" data-page="proyectos">Proyectos</a>
+        <a href="#" data-page="activismo">Activismo</a>
+        <a href="#" data-page="derechos">Derechos de Usuarios</a>
+      </div>
+    </div>
+    
     <a href="#" data-page="contacto">Contacto</a>
   </nav>
 
   <!-- Menú móvil flotante -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#" data-page="index" class="active">Inicio</a>
-    <a href="#" data-page="tips">Tips de Cultivo</a>
-    <a href="#" data-page="tecnicas">Técnicas</a>
-    <a href="#" data-page="ciencia">Ciencia y Extracciones</a>
-    <a href="#" data-page="derivados">Derivados</a>
-    <a href="#" data-page="articulos">Artículos Periodísticos</a>
-    <a href="#" data-page="resenas">Reseñas de Usuarios</a>
-    <a href="#" data-page="territorio">Territorio y Organización</a>
-    <a href="#" data-page="legislacion">Legislación</a>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Cultivo</a>
+      <div class="submenu">
+        <a href="#" data-page="tips">Tips de Cultivo</a>
+        <a href="#" data-page="tecnicas">Técnicas Generales</a>
+        <a href="#" data-page="sustratos">Sustratos</a>
+        <a href="#" data-page="nutricion">Nutrición</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Técnicas</a>
+      <div class="submenu">
+        <a href="#" data-page="hidroponia">Hidroponía</a>
+        <a href="#" data-page="coco">Cultivo en Coco</a>
+        <a href="#" data-page="suelo-vivo">Suelo Vivo</a>
+        <a href="#" data-page="organico">Orgánico</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Ciencia</a>
+      <div class="submenu">
+        <a href="#" data-page="extracciones">Extracciones</a>
+        <a href="#" data-page="derivados">Derivados</a>
+        <a href="#" data-page="investigacion">Investigación</a>
+        <a href="#" data-page="analisis">Análisis de Cannabinoides</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Comunidad</a>
+      <div class="submenu">
+        <a href="#" data-page="articulos">Artículos</a>
+        <a href="#" data-page="resenas">Reseñas</a>
+        <a href="#" data-page="territorio">Trabajo Territorial</a>
+        <a href="#" data-page="eventos">Eventos</a>
+      </div>
+    </div>
+    
+    <div class="menu-item">
+      <a href="#" class="menu-toggle">Legislación</a>
+      <div class="submenu">
+        <a href="#" data-page="ley-actual">Ley Actual</a>
+        <a href="#" data-page="proyectos">Proyectos</a>
+        <a href="#" data-page="activismo">Activismo</a>
+        <a href="#" data-page="derechos">Derechos de Usuarios</a>
+      </div>
+    </div>
+    
     <a href="#" data-page="contacto">Contacto</a>
   </div>
 
@@ -470,143 +642,29 @@
     </div>
   </template>
 
-  <template id="tecnicas-content">
+  <template id="hidroponia-content">
     <div class="content-section">
-      <h2>Técnicas de Cultivo</h2>
-      <p>Explora diferentes métodos para optimizar tu cultivo de cannabis según tus necesidades y recursos.</p>
+      <h2>Hidroponía</h2>
+      <p>El cultivo hidropónico permite un crecimiento más rápido y mayores rendimientos mediante el uso de soluciones nutritivas.</p>
       
-      <h3>Suelo Vivo</h3>
-      <p>El método de suelo vivo imita los ecosistemas naturales, creando un entorno rico en microorganismos beneficiosos que trabajan en simbiosis con las raíces.</p>
+      <h3>Ventajas de la Hidroponía</h3>
       <ul>
-        <li>Mezcla de sustrato orgánico con compost y humus de lombriz</li>
-        <li>Incorporación de microorganismos beneficiosos (micorrizas, trichodermas)</li>
-        <li>Uso de minerales naturales como harina de rocas y zeolita</li>
-        <li>Fertilización con té de compost y otros preparados naturales</li>
+        <li><strong>Crecimiento más rápido:</strong> Las plantas reciben nutrientes directamente</li>
+        <li><strong>Mayor control:</strong> Puedes ajustar fácilmente los niveles de nutrientes</li>
+        <li><strong>Menos plagas:</strong> Sin suelo, se reducen los problemas de plagas</li>
+        <li><strong>Mayor rendimiento:</strong> Plantas más saludables producen más</li>
       </ul>
       
-      <h3>Hidroponía</h3>
-      <p>Cultivo sin suelo donde las raíces reciben una solución nutritiva equilibrada disuelta en agua con oxigenación constante.</p>
+      <h3>Sistemas Hidropónicos</h3>
+      <p>Existen varios tipos de sistemas hidropónicos:</p>
       <div class="highlight">
-        <p><strong>Ventaja principal:</strong> Mayor control sobre los nutrientes y crecimiento más rápido con cosechas más abundantes.</p>
-      </div>
-      <p>Sistemas hidropónicos comunes:</p>
-      <ul>
-        <li>Sistema de mecha (wick system)</li>
-        <li>Cultura de aguas profundas (DWC)</li>
-        <li>Sistema de flujo y reflujo (Ebb & Flow)</li>
-        <li>Técnica de película nutritiva (NFT)</li>
-      </ul>
-      
-      <h3>Cultivo en Coco</h3>
-      <p>La fibra de coco es un medio de cultivo versátil que combina características del suelo y la hidroponía, ofreciendo excelentes resultados.</p>
-      <ul>
-        <li>Excelente aireación para las raíces, evitando problemas de oxigenación</li>
-        <li>Retención de humedad equilibrada que permite mayor margen de error en el riego</li>
-        <li>Requiere nutrientes específicos para coco, con mayor necesidad de calcio y magnesio</li>
-        <li>pH ligeramente ácido (5.8-6.2) para una óptima absorción de nutrientes</li>
-      </ul>
-    </div>
-  </template>
-
-  <template id="derivados-content">
-    <div class="content-section">
-      <h2>Elaboración de Derivados</h2>
-      <p>Aprende a transformar tu cosecha en diferentes productos cannábicos para diversos usos y preferencias.</p>
-      
-      <h3>Extracciones</h3>
-      <p>Métodos para concentrar los cannabinoides y terpenos de la planta, obteniendo productos de mayor potencia:</p>
-      <ul>
-        <li><strong>Extracción con hielo seco</strong> (bubble hash) - Método físico sin solventes</li>
-        <li><strong>Extracción con solventes</strong> (butano, etanol) - Para obtener shatter, wax y otros concentrados</li>
-        <li><strong>Extracción con CO2 supercrítico</strong> - Método profesional de alta pureza</li>
-        <li><strong>Rosin</strong> (prensado en caliente) - Técnica sencilla y segura sin solventes</li>
-      </ul>
-      
-      <h3>Comestibles</h3>
-      <p>Preparación de alimentos infusionados con cannabis para una experiencia diferente al consumo por inhalación:</p>
-      <div class="highlight">
-        <p><strong>Importante:</strong> La descarboxilación es esencial para activar los cannabinoides antes de su consumo oral. Sin este paso, los efectos serán mínimos.</p>
+        <p><strong>Recomendación para principiantes:</strong> El sistema DWC (Deep Water Culture) es ideal para empezar por su simplicidad y efectividad.</p>
       </div>
       <ul>
-        <li>Mantequilla cannábica (cannabutter) - Base para múltiples recetas</li>
-        <li>Aceites infusionados (oliva, coco) - Versátiles para cocina y uso tópico</li>
-        <li>Bebidas y tinturas - Para dosificación precisa y discreta</li>
-        <li>Dulces y chocolates - Opciones populares y sabrosas</li>
-      </ul>
-      
-      <h3>Productos Tópicos</h3>
-      <p>Creación de productos para aplicación cutánea, ideales para alivio localizado sin efectos psicoactivos:</p>
-      <ul>
-        <li>Crema y pomadas analgésicas - Para dolores musculares y articulares</li>
-        <li>Aceites de masaje - Combinan relajación con beneficios cannábicos</li>
-        <li>Bálsamos labiales - Hidratación con cannabinoides</li>
-        <li>Parches transdérmicos - Liberación prolongada de cannabinoides</li>
-      </ul>
-    </div>
-  </template>
-
-  <template id="territorio-content">
-    <div class="content-section">
-      <h2>Trabajo Territorial y Organización</h2>
-      <p>La unión hace la fuerza: construyendo comunidad cannábica en el Oeste del Gran Buenos Aires.</p>
-      
-      <h3>Nuestra Misión</h3>
-      <p>Promover la organización comunitaria para el autocultivo responsable, el acceso seguro al cannabis terapéutico y la defensa de los derechos de los usuarios.</p>
-      
-      <h3>Actividades Comunitarias</h3>
-      <ul>
-        <li><strong>Talleres de cultivo colectivo</strong> - Aprendizaje práctico y colaborativo</li>
-        <li><strong>Intercambio de semillas y esquejes</strong> - Diversificación genética comunitaria</li>
-        <li><strong>Asesoramiento legal gratuito</strong> - Conocimiento de derechos y obligaciones</li>
-        <li><strong>Jornadas de extracción segura</strong> - Prácticas responsables para elaborar derivados</li>
-        <li><strong>Encuentros informativos</strong> - Actualización sobre avances legales y científicos</li>
-      </ul>
-      
-      <div class="highlight">
-        <p><strong>Próximo evento:</strong> Este sábado 15 de junio, jornada de intercambio de semillas y taller de preparación de sustratos para cultivo orgánico.</p>
-      </div>
-      
-      <h3>Unión de Agrupaciones</h3>
-      <p>Trabajamos en red con otras organizaciones cannábicas de la zona para:</p>
-      <ul>
-        <li>Fortalecer el movimiento activista a nivel regional y nacional</li>
-        <li>Compartir conocimientos, experiencias y recursos entre colectivos</li>
-        <li>Coordinar acciones de incidencia política para mejorar el marco legal</li>
-        <li>Organizar eventos regionales que visibilicen nuestra causa</li>
-        <li>Establecer alianzas con profesionales de la salud e investigadores</li>
-      </ul>
-    </div>
-  </template>
-
-  <template id="legislacion-content">
-    <div class="content-section">
-      <h2>Legislación Actual</h2>
-      <p>Conoce el marco legal que regula el uso del cannabis en Argentina y los derechos de los usuarios.</p>
-      
-      <h3>Ley 27.350 - Uso Medicinal del Cannabis</h3>
-      <p>Esta ley, sancionada en 2017, regula la investigación médica y científica del uso medicinal de la planta de cannabis y sus derivados, creando el marco para el acceso a tratamientos con cannabis.</p>
-      
-      <h3>Autocultivo Regulado</h3>
-      <p>El REPROCANN (Registro del Programa de Cannabis) permite el autocultivo para pacientes con indicación médica, estableciendo un registro de cultivadores y usuarios.</p>
-      <ul>
-        <li>Inscripción en el registro nacional con certificación médica</li>
-        <li>Cultivo controlado para uso personal con límites de plantas</li>
-        <li>Portación de cannabis para tratamiento con documentación correspondiente</li>
-        <li>Acceso a aceites y derivados de producción pública</li>
-      </ul>
-      
-      <div class="highlight">
-        <p><strong>Actualización importante:</strong> Recientes fallos judiciales han ampliado los derechos de los usuarios de cannabis medicinal, reconociendo el autocultivo como una vía legítima de acceso.</p>
-      </div>
-      
-      <h3>Proyectos en Discusión</h3>
-      <p>Actualmente se debaten en el Congreso varias iniciativas para ampliar y mejorar la regulación existente:</p>
-      <ul>
-        <li>Regular el autocultivo solidario y los clubes de cultivo</li>
-        <li>Permitir la venta en farmacias de productos cannábicos estandarizados</li>
-        <li>Despenalizar el consumo recreativo con regulación similar al alcohol</li>
-        <li>Fomentar la industria nacional del cannabis con fines medicinales e industriales</li>
-        <li>Establecer programas de investigación en universidades públicas</li>
+        <li><strong>DWC (Deep Water Culture):</strong> Raíces suspendidas en solución nutritiva oxigenada</li>
+        <li><strong>NFT (Nutrient Film Technique):</strong> Flujo constante de solución nutritiva</li>
+        <li><strong>Ebb & Flow (Flujo y Reflujo):</strong> Inundación periódica del medio de cultivo</li>
+        <li><strong>Aeroponía:</strong> Raíces suspendidas en aire con nebulización de nutrientes</li>
       </ul>
     </div>
   </template>
@@ -645,6 +703,7 @@
     const mainContent = document.getElementById('main-content');
     const navLinks = document.querySelectorAll('nav a, .mobile-menu a');
     const themeToggle = document.getElementById('themeToggle');
+    const menuItems = document.querySelectorAll('.menu-item');
 
     // Función para abrir/cerrar el menú móvil
     function toggleMobileMenu() {
@@ -663,6 +722,9 @@
         spans[1].style.opacity = '1';
         spans[2].style.transform = 'none';
         document.body.style.overflow = ''; // Restaura el scroll
+        
+        // Cerrar todos los submenús al cerrar el menú móvil
+        closeAllSubmenus();
       }
     }
 
@@ -703,6 +765,40 @@
       }
     }
 
+    // Funcionalidad para submenús
+    function setupSubmenus() {
+      menuItems.forEach(item => {
+        const toggle = item.querySelector('.menu-toggle');
+        
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Cerrar otros submenús abiertos
+          menuItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Alternar el submenú actual
+          item.classList.toggle('active');
+        });
+      });
+    }
+
+    // Cerrar todos los submenús
+    function closeAllSubmenus() {
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+      });
+    }
+
+    // Cerrar submenús al hacer clic fuera
+    document.addEventListener('click', () => {
+      closeAllSubmenus();
+    });
+
     // Cargar contenido según la página seleccionada
     function loadContent(page) {
       // Actualizar clase activa en el menú
@@ -712,6 +808,9 @@
           link.classList.add('active');
         }
       });
+
+      // Cerrar todos los submenús al cambiar de página
+      closeAllSubmenus();
 
       // Si es la página de inicio, cargar artículos
       if (page === 'index') {
@@ -778,13 +877,16 @@
     // Configurar eventos para los enlaces del menú
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const page = link.getAttribute('data-page');
-        loadContent(page);
-        
-        // Cerrar menú en dispositivos móviles
-        if (window.innerWidth <= 768) {
-          toggleMobileMenu();
+        // Solo procesar si no es un toggle de submenú
+        if (!link.classList.contains('menu-toggle')) {
+          e.preventDefault();
+          const page = link.getAttribute('data-page');
+          loadContent(page);
+          
+          // Cerrar menú en dispositivos móviles
+          if (window.innerWidth <= 768) {
+            toggleMobileMenu();
+          }
         }
       });
     });
@@ -793,6 +895,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadContent('index');
       checkSavedTheme();
+      setupSubmenus();
     });
   </script>
 </body>

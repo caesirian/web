@@ -19,23 +19,23 @@
       --accent-light: #c8e6c9;
       --border-color: #dee2e6;
       --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --overlay: rgba(0, 0, 0, 0.5);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        /* Colores para modo oscuro */
-        --bg-primary: #121212;
-        --bg-secondary: #1e1e1e;
-        --bg-header: #1b5e20;
-        --bg-nav: #2e7d32;
-        --text-primary: #e0e0e0;
-        --text-secondary: #b0b0b0;
-        --text-light: #8a8a8a;
-        --accent-color: #4caf50;
-        --accent-light: #1b5e20;
-        --border-color: #333333;
-        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      }
+    .dark-mode {
+      /* Colores para modo oscuro */
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-header: #1b5e20;
+      --bg-nav: #2e7d32;
+      --text-primary: #e0e0e0;
+      --text-secondary: #b0b0b0;
+      --text-light: #8a8a8a;
+      --accent-color: #4caf50;
+      --accent-light: #1b5e20;
+      --border-color: #333333;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --overlay: rgba(0, 0, 0, 0.7);
     }
 
     body {
@@ -55,6 +55,7 @@
       padding: 15px 20px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       position: relative;
+      z-index: 1000;
     }
 
     .logo-container {
@@ -91,6 +92,7 @@
       border: none;
       cursor: pointer;
       padding: 5px;
+      z-index: 1001;
     }
 
     .hamburger span {
@@ -109,7 +111,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      transition: max-height 0.3s ease-out;
+      transition: all 0.3s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
@@ -130,6 +132,56 @@
     nav a.active {
       background: rgba(255, 255, 255, 0.25);
       font-weight: 600;
+    }
+
+    /* Menú móvil flotante */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100%;
+      background: var(--bg-nav);
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      padding-top: 80px;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+    }
+
+    .mobile-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay);
+      z-index: 998;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
     }
 
     .container {
@@ -193,6 +245,23 @@
       padding: 25px 20px;
       font-size: 0.9rem;
       margin-top: 40px;
+    }
+
+    .theme-toggle {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
 
     /* Estilos para contenido cargado */
@@ -268,25 +337,11 @@
       }
 
       nav {
-        flex-direction: column;
-        max-height: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 1000;
+        display: none;
       }
 
-      nav.active {
-        max-height: 500px;
-      }
-
-      nav a {
+      .mobile-menu {
         display: block;
-        text-align: center;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 15px;
       }
       
       .content-section {
@@ -315,6 +370,10 @@
         grid-template-columns: 1fr;
         padding: 20px 15px;
         gap: 20px;
+      }
+      
+      .mobile-menu {
+        width: 250px;
       }
     }
   </style>
@@ -349,6 +408,22 @@
     <a href="#" data-page="contacto">Contacto</a>
   </nav>
 
+  <!-- Menú móvil flotante -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" data-page="index" class="active">Inicio</a>
+    <a href="#" data-page="tips">Tips de Cultivo</a>
+    <a href="#" data-page="tecnicas">Técnicas</a>
+    <a href="#" data-page="ciencia">Ciencia y Extracciones</a>
+    <a href="#" data-page="derivados">Derivados</a>
+    <a href="#" data-page="articulos">Artículos Periodísticos</a>
+    <a href="#" data-page="resenas">Reseñas de Usuarios</a>
+    <a href="#" data-page="territorio">Territorio y Organización</a>
+    <a href="#" data-page="legislacion">Legislación</a>
+    <a href="#" data-page="contacto">Contacto</a>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
   <main id="main-content">
     <!-- Contenido se cargará aquí dinámicamente -->
     <section class="container" id="articulos">
@@ -358,6 +433,9 @@
 
   <footer>
     © 2025 Coco Querandí - Comunidad Cannábica del Oeste · Todos los derechos reservados
+    <div>
+      <button class="theme-toggle" id="themeToggle">Cambiar a modo oscuro</button>
+    </div>
   </footer>
 
   <!-- Contenido de ejemplo para cuando no se encuentren los archivos -->
@@ -562,25 +640,68 @@
   <script>
     // Funcionalidad del menú hamburguesa
     const hamburger = document.getElementById('hamburger');
-    const nav = document.getElementById('nav');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
     const mainContent = document.getElementById('main-content');
-    const navLinks = document.querySelectorAll('nav a');
+    const navLinks = document.querySelectorAll('nav a, .mobile-menu a');
+    const themeToggle = document.getElementById('themeToggle');
 
-    hamburger.addEventListener('click', () => {
-      nav.classList.toggle('active');
+    // Función para abrir/cerrar el menú móvil
+    function toggleMobileMenu() {
+      mobileMenu.classList.toggle('active');
+      overlay.classList.toggle('active');
       
       // Animación del botón hamburguesa a X
       const spans = hamburger.querySelectorAll('span');
-      if (nav.classList.contains('active')) {
+      if (mobileMenu.classList.contains('active')) {
         spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
         spans[1].style.opacity = '0';
         spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+        document.body.style.overflow = 'hidden'; // Evita el scroll cuando el menú está abierto
       } else {
         spans[0].style.transform = 'none';
         spans[1].style.opacity = '1';
         spans[2].style.transform = 'none';
+        document.body.style.overflow = ''; // Restaura el scroll
       }
-    });
+    }
+
+    hamburger.addEventListener('click', toggleMobileMenu);
+    
+    // Cerrar menú al hacer clic en el overlay
+    overlay.addEventListener('click', toggleMobileMenu);
+
+    // Función para cambiar entre modo claro y oscuro
+    function toggleTheme() {
+      const body = document.body;
+      const isDarkMode = body.classList.contains('dark-mode');
+      
+      if (isDarkMode) {
+        body.classList.remove('dark-mode');
+        themeToggle.textContent = 'Cambiar a modo oscuro';
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.add('dark-mode');
+        themeToggle.textContent = 'Cambiar a modo claro';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Verificar preferencia guardada al cargar la página
+    function checkSavedTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = 'Cambiar a modo claro';
+      } else {
+        document.body.classList.remove('dark-mode');
+        themeToggle.textContent = 'Cambiar a modo oscuro';
+      }
+    }
 
     // Cargar contenido según la página seleccionada
     function loadContent(page) {
@@ -663,17 +784,16 @@
         
         // Cerrar menú en dispositivos móviles
         if (window.innerWidth <= 768) {
-          nav.classList.remove('active');
-          const spans = hamburger.querySelectorAll('span');
-          spans[0].style.transform = 'none';
-          spans[1].style.opacity = '1';
-          spans[2].style.transform = 'none';
+          toggleMobileMenu();
         }
       });
     });
 
-    // Cargar contenido inicial (página de inicio)
-    loadContent('index');
+    // Cargar contenido inicial (página de inicio) y verificar tema
+    document.addEventListener('DOMContentLoaded', () => {
+      loadContent('index');
+      checkSavedTheme();
+    });
   </script>
 </body>
 </html>

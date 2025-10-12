@@ -50,14 +50,14 @@
       background-image: 
         linear-gradient(90deg, var(--line-color) 1px, transparent 1px),
         linear-gradient(180deg, var(--line-color) 1px, transparent 1px);
-      background-size: 20px 20px;
+      background-size: 20px 10px;
     }
 
     header {
       background: var(--bg-header);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       padding: 10px 20px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       position: relative;
@@ -68,11 +68,12 @@
     .logo-container {
       display: flex;
       align-items: center;
+      text-align: center;
     }
 
     header img {
       height: 150px;
-      margin-right: 20px;
+      margin-right: 15px;
     }
 
     .logo-text {
@@ -80,7 +81,7 @@
     }
 
     .logo-text h1 {
-      font-size: 2.4rem; /* 50% más grande que 1.6rem */
+      font-size: 2.4rem;
       margin: 0;
       font-weight: 700;
       color: var(--accent-color);
@@ -101,6 +102,8 @@
       cursor: pointer;
       padding: 5px;
       z-index: 1001;
+      position: absolute;
+      right: 20px;
     }
 
     .hamburger span {
@@ -363,34 +366,59 @@
       color: var(--text-primary);
     }
 
-    /* Botón de suscripción */
-    .subscribe-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      text-align: center;
+    /* Botón de suscripción fijo */
+    .fixed-subscribe {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
     }
-
-    .subscribe-btn {
+    
+    .fixed-subscribe-btn {
       background: var(--accent-color);
       color: white;
       border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 1rem;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
-    .subscribe-btn:hover {
+    
+    .fixed-subscribe-btn:hover {
       background: #1b5e20;
       transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+    
+    .fixed-subscribe-btn:before {
+      content: "🔔";
+      font-size: 1.1rem;
     }
 
-    .subscribe-btn:active {
-      transform: translateY(0);
+    .fixed-subscribe-btn.subscribed {
+      background: #4caf50;
+    }
+
+    .fixed-subscribe-btn.subscribed:before {
+      content: "✅";
+    }
+
+    @media (max-width: 768px) {
+      .fixed-subscribe {
+        bottom: 15px;
+        right: 15px;
+      }
+      
+      .fixed-subscribe-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+      }
     }
 
     footer {
@@ -554,6 +582,29 @@
       background: var(--border-color);
     }
 
+    /* Estilos para notificaciones */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
     /* Estilos responsivos */
     @media (max-width: 768px) {
       .logo-text h1 {
@@ -577,7 +628,7 @@
       }
       
       header img {
-        height: 120px;
+        height: 100px;
       }
       
       .content-section {
@@ -603,18 +654,18 @@
 
     @media (max-width: 480px) {
       header {
-        padding: 15px;
+        padding: 10px 15px;
         flex-direction: column;
         text-align: center;
       }
 
       .logo-container {
         flex-direction: column;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
       }
       
       header img {
-        height: 100px;
+        height: 80px;
         margin-right: 0;
         margin-bottom: 10px;
       }
@@ -704,6 +755,11 @@
     <a href="#" data-page="contacto">Contacto</a>
   </nav>
 
+  <!-- Botón de suscripción FIJO que nunca desaparece -->
+  <div class="fixed-subscribe">
+    <button class="fixed-subscribe-btn" id="fixedSubscribeBtn">Suscribirse</button>
+  </div>
+
   <!-- Menú móvil flotante -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#" data-page="index" class="active">Inicio</a>
@@ -764,12 +820,7 @@
   <div class="overlay" id="overlay"></div>
 
   <main id="main-content">
-    <!-- Botón de suscripción -->
-    <div class="subscribe-container">
-      <button class="subscribe-btn" id="subscribeBtn">Suscribirse a Novedades</button>
-    </div>
-
-    <!-- Contenido se cargará aquí dinámicamente -->
+    <!-- SOLO contenido dinámico aquí - sin botones de suscripción -->
     <section class="container" id="articulos">
       <p>Cargando artículos...</p>
     </section>
@@ -786,11 +837,23 @@
   <div class="modal" id="subscribeModal">
     <div class="modal-content">
       <h2>Suscribirse a Novedades</h2>
-      <p>¿Deseas recibir notificaciones cuando publiquemos nuevos artículos?</p>
+      <p>Ingresa tu email para recibir notificaciones de nuevos artículos:</p>
+      <input type="email" id="subscribeEmail" placeholder="tu@email.com" required style="
+        width: 100%;
+        padding: 12px;
+        margin: 15px 0;
+        border: 2px solid var(--accent-light);
+        border-radius: 6px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      ">
       <div class="modal-buttons">
-        <button class="modal-btn confirm" id="confirmSubscribe">Sí, suscribirme</button>
-        <button class="modal-btn cancel" id="cancelSubscribe">Ahora no</button>
+        <button class="modal-btn confirm" id="confirmSubscribe">Suscribirme</button>
+        <button class="modal-btn cancel" id="cancelSubscribe">Cancelar</button>
       </div>
+      <p style="font-size: 0.8rem; margin-top: 15px; color: var(--text-light);">
+        Te enviaremos un email cuando publiquemos nuevo contenido.
+      </p>
     </div>
   </div>
 
@@ -880,7 +943,11 @@
   </template>
 
   <script>
-    // Funcionalidad del menú hamburguesa
+    // Configuración
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWq4KR7K8AEtz-f5EzKmDFIn28TB-ZvDWKM12fjswTC6urQ48gDJ4MMRVO5raVnc_B/exec";
+    const SHEET_ID = "1GDXDXToVl_ZPtu4m82cIl4bvoFfSf-0ItFYs73VPUok";
+
+    // Elementos DOM
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
     const overlay = document.getElementById('overlay');
@@ -888,37 +955,30 @@
     const navLinks = document.querySelectorAll('nav a, .mobile-menu a');
     const themeToggle = document.getElementById('themeToggle');
     const menuItems = document.querySelectorAll('.menu-item');
-    const subscribeBtn = document.getElementById('subscribeBtn');
+    const fixedSubscribeBtn = document.getElementById('fixedSubscribeBtn');
     const subscribeModal = document.getElementById('subscribeModal');
-    const confirmSubscribe = document.getElementById('confirmSubscribe');
-    const cancelSubscribe = document.getElementById('cancelSubscribe');
 
     // Función para abrir/cerrar el menú móvil
     function toggleMobileMenu() {
       mobileMenu.classList.toggle('active');
       overlay.classList.toggle('active');
       
-      // Animación del botón hamburguesa a X
       const spans = hamburger.querySelectorAll('span');
       if (mobileMenu.classList.contains('active')) {
         spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
         spans[1].style.opacity = '0';
         spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
-        document.body.style.overflow = 'hidden'; // Evita el scroll cuando el menú está abierto
+        document.body.style.overflow = 'hidden';
       } else {
         spans[0].style.transform = 'none';
         spans[1].style.opacity = '1';
         spans[2].style.transform = 'none';
-        document.body.style.overflow = ''; // Restaura el scroll
-        
-        // Cerrar todos los submenús al cerrar el menú móvil
+        document.body.style.overflow = '';
         closeAllSubmenus();
       }
     }
 
     hamburger.addEventListener('click', toggleMobileMenu);
-    
-    // Cerrar menú al hacer clic en el overlay
     overlay.addEventListener('click', toggleMobileMenu);
 
     // Función para cambiar entre modo claro y oscuro
@@ -962,14 +1022,12 @@
           e.preventDefault();
           e.stopPropagation();
           
-          // Cerrar otros submenús abiertos
           menuItems.forEach(otherItem => {
             if (otherItem !== item) {
               otherItem.classList.remove('active');
             }
           });
           
-          // Alternar el submenú actual
           item.classList.toggle('active');
         });
       });
@@ -987,172 +1045,151 @@
       closeAllSubmenus();
     });
 
-    // Configuración - REEMPLAZA CON TUS DATOS REALES
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWq4KR7K8AEtz-f5EzKmDFIn28TB-ZvDWKM12fjswTC6urQ48gDJ4MMRVO5raVnc_B/exec";
+    // Funcionalidad de suscripción a notificaciones
+    function setupSubscription() {
+      fixedSubscribeBtn.addEventListener('click', () => {
+        showEmailModal();
+      });
 
-// Funcionalidad de suscripción a notificaciones
-function setupSubscription() {
-  subscribeBtn.addEventListener('click', () => {
-    // Mostrar modal para ingresar email
-    showEmailModal();
-  });
+      const confirmSubscribe = document.getElementById('confirmSubscribe');
+      const cancelSubscribe = document.getElementById('cancelSubscribe');
 
-  confirmSubscribe.addEventListener('click', () => {
-    const email = document.getElementById('subscribeEmail').value;
-    if (validateEmail(email)) {
-      subscribeToNotifications(email);
-    } else {
-      alert('Por favor ingresa un email válido');
-    }
-  });
-
-  cancelSubscribe.addEventListener('click', () => {
-    subscribeModal.classList.remove('active');
-  });
-
-  // Cerrar modal al hacer clic fuera
-  subscribeModal.addEventListener('click', (e) => {
-    if (e.target === subscribeModal) {
-      subscribeModal.classList.remove('active');
-    }
-  });
-}
-
-// Mostrar modal con campo de email
-function showEmailModal() {
-  subscribeModal.innerHTML = `
-    <div class="modal-content">
-      <h2>Suscribirse a Novedades</h2>
-      <p>Ingresa tu email para recibir notificaciones de nuevos artículos:</p>
-      <input type="email" id="subscribeEmail" placeholder="tu@email.com" required style="
-        width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        font-size: 1rem;
-      ">
-      <div class="modal-buttons">
-        <button class="modal-btn confirm" id="confirmSubscribe">Suscribirme</button>
-        <button class="modal-btn cancel" id="cancelSubscribe">Cancelar</button>
-      </div>
-    </div>
-  `;
-  
-  // Re-asignar eventos a los nuevos botones
-  document.getElementById('confirmSubscribe').addEventListener('click', confirmSubscribe.click);
-  document.getElementById('cancelSubscribe').addEventListener('click', cancelSubscribe.click);
-  
-  subscribeModal.classList.add('active');
-}
-
-// Validar email
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-// Suscribir a notificaciones
-function subscribeToNotifications(email) {
-  const subscriptionData = {
-    action: 'subscribe',
-    email: email,
-    userAgent: navigator.userAgent,
-    timestamp: new Date().toISOString()
-  };
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(subscriptionData)
-  })
-  .then(response => response.json())
-  .then(data => {
-    subscribeModal.classList.remove('active');
-    if (data.success) {
-      alert('¡Te has suscrito exitosamente! Recibirás notificaciones por email.');
-      
-      // También solicitar permisos para notificaciones del navegador
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
-      }
-    } else {
-      alert(data.message || 'Error en la suscripción');
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Error de conexión. Intenta nuevamente.');
-  });
-}
-
-// Función para enviar notificación manual (para testing)
-function testNotification() {
-  const testData = {
-    action: 'sendNotification',
-    titulo: 'Test de Notificación',
-    mensaje: 'Esta es una notificación de prueba del sistema',
-    url: 'https://cocoquerandi.com.ar'
-  };
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify(testData)
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Test result:', data);
-    alert('Notificación de prueba enviada: ' + data.message);
-  });
-}
-
-    // Cargar contenido según la página seleccionada
-    function loadContent(page) {
-      // Actualizar clase activa en el menú
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('data-page') === page) {
-          link.classList.add('active');
+      confirmSubscribe.addEventListener('click', () => {
+        const email = document.getElementById('subscribeEmail').value;
+        if (validateEmail(email)) {
+          subscribeToNotifications(email);
+        } else {
+          showNotification('Por favor ingresa un email válido', 'error');
         }
       });
 
-      // Cerrar todos los submenús al cambiar de página
-      closeAllSubmenus();
+      cancelSubscribe.addEventListener('click', () => {
+        subscribeModal.classList.remove('active');
+      });
 
-      // Si es la página de inicio, cargar artículos
-      if (page === 'index') {
-        loadArticles();
-        return;
-      }
+      subscribeModal.addEventListener('click', (e) => {
+        if (e.target === subscribeModal) {
+          subscribeModal.classList.remove('active');
+        }
+      });
+    }
 
-      // Intentar cargar el archivo externo
-      fetch(`${page}.html`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Archivo no encontrado');
+    // Mostrar modal con campo de email
+    function showEmailModal() {
+      const emailInput = document.getElementById('subscribeEmail');
+      if (emailInput) emailInput.value = '';
+      
+      subscribeModal.classList.add('active');
+      
+      setTimeout(() => {
+        const emailInput = document.getElementById('subscribeEmail');
+        if (emailInput) emailInput.focus();
+      }, 300);
+    }
+
+    // Validar email
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Suscribir a notificaciones
+    function subscribeToNotifications(email) {
+      const confirmBtn = document.getElementById('confirmSubscribe');
+      const originalText = confirmBtn.textContent;
+      confirmBtn.textContent = 'Enviando...';
+      confirmBtn.disabled = true;
+
+      const subscriptionData = {
+        action: 'subscribe',
+        email: email,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        source: 'cocoquerandi_website'
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subscriptionData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error de red');
+        }
+        return response.json();
+      })
+      .then(data => {
+        subscribeModal.classList.remove('active');
+        
+        if (data.success) {
+          fixedSubscribeBtn.textContent = '¡Suscrito!';
+          fixedSubscribeBtn.classList.add('subscribed');
+          fixedSubscribeBtn.disabled = true;
+          
+          showNotification('¡Suscripción exitosa! Recibirás nuestras novedades por email.', 'success');
+          
+          if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
           }
-          return response.text();
-        })
-        .then(html => {
-          mainContent.innerHTML = html;
-        })
-        .catch(error => {
-          // Si no se encuentra el archivo, cargar contenido de ejemplo
-          console.log(`No se encontró ${page}.html, cargando contenido de ejemplo`);
-          const template = document.getElementById(`${page}-content`) || document.getElementById('default-content');
-          const clone = document.importNode(template.content, true);
-          mainContent.innerHTML = '';
-          mainContent.appendChild(clone);
-        });
+        } else {
+          showNotification(data.message || 'Error en la suscripción', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('Error de conexión. Intenta nuevamente.', 'error');
+      })
+      .finally(() => {
+        confirmBtn.textContent = originalText;
+        confirmBtn.disabled = false;
+      });
+    }
+
+    // Mostrar notificación temporal
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease;
+      `;
+      
+      if (type === 'success') {
+        notification.style.background = '#4caf50';
+      } else if (type === 'error') {
+        notification.style.background = '#f44336';
+      } else {
+        notification.style.background = '#2196f3';
+      }
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 5000);
     }
 
     // Cargar artículos desde Google Sheets
     function loadArticles() {
-      const sheetID = "TU_ID_DE_HOJA_AQUI";
       const sheetName = "Articulos";
-      const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+      const url = `https://opensheet.elk.sh/${SHEET_ID}/${sheetName}`;
 
       fetch(url)
         .then((res) => res.json())
@@ -1161,41 +1198,105 @@ function testNotification() {
           container.className = 'container';
           container.id = 'articulos';
           
-          data.forEach((art) => {
-            const div = document.createElement("div");
-            div.className = "article";
-            div.innerHTML = `
-              <img src="${art.Imagen}" alt="${art.Titulo}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlOGU4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBlbmNvbnRyYWRhPC90ZXh0Pjwvc3ZnPg=='">
-              <div class="article-content">
-                <h2>${art.Titulo}</h2>
-                <h3>${art.Subtitulo}</h3>
-                <p>${art.Texto}</p>
-              </div>
-            `;
-            container.appendChild(div);
-          });
+          if (data && data.length > 0) {
+            data.forEach((art) => {
+              const div = document.createElement("div");
+              div.className = "article";
+              div.innerHTML = `
+                <img src="${art.Imagen}" alt="${art.Titulo}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlOGU4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBlbmNvbnRyYWRhPC90ZXh0Pjwvc3ZnPg=='">
+                <div class="article-content">
+                  <h2>${art.Titulo}</h2>
+                  <h3>${art.Subtitulo}</h3>
+                  <p>${art.Texto}</p>
+                </div>
+              `;
+              container.appendChild(div);
+            });
+          } else {
+            container.innerHTML = '<p>No hay artículos disponibles en este momento.</p>';
+          }
           
-          mainContent.innerHTML = '';
-          // Mantener el botón de suscripción
-          const subscribeContainer = document.querySelector('.subscribe-container');
-          mainContent.appendChild(subscribeContainer);
-          mainContent.appendChild(container);
+          const oldContainer = document.getElementById('articulos');
+          if (oldContainer) {
+            oldContainer.replaceWith(container);
+          } else {
+            mainContent.appendChild(container);
+          }
         })
-        .catch(() => {
-          mainContent.innerHTML = '<section class="container" id="articulos"><p>Error al cargar los artículos. Verifica la hoja de cálculo.</p></section>';
+        .catch((error) => {
+          console.error('Error:', error);
+          const container = document.getElementById('articulos');
+          if (container) {
+            container.innerHTML = '<p>Error al cargar los artículos. Verifica la hoja de cálculo.</p>';
+          }
+        });
+    }
+
+    // Cargar contenido según la página seleccionada
+    function loadContent(page) {
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-page') === page) {
+          link.classList.add('active');
+        }
+      });
+
+      closeAllSubmenus();
+
+      if (page === 'index') {
+        loadArticles();
+        return;
+      }
+
+      fetch(`${page}.html`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Archivo no encontrado');
+          }
+          return response.text();
+        })
+        .then(html => {
+          const contentDiv = document.createElement('div');
+          contentDiv.innerHTML = html;
+          
+          const oldContent = mainContent.querySelector('.content-section, .container');
+          if (oldContent) {
+            oldContent.replaceWith(contentDiv);
+          } else {
+            const elementsToKeep = [];
+            mainContent.childNodes.forEach(node => {
+              if (node.nodeType === 1 && !node.classList.contains('container')) {
+                elementsToKeep.push(node);
+              }
+            });
+            
+            mainContent.innerHTML = '';
+            elementsToKeep.forEach(el => mainContent.appendChild(el));
+            mainContent.appendChild(contentDiv);
+          }
+        })
+        .catch(error => {
+          console.log(`No se encontró ${page}.html, cargando contenido de ejemplo`);
+          const template = document.getElementById(`${page}-content`) || document.getElementById('default-content');
+          const clone = document.importNode(template.content, true);
+          
+          const oldContent = mainContent.querySelector('.content-section, .container');
+          if (oldContent) {
+            oldContent.replaceWith(clone);
+          } else {
+            mainContent.appendChild(clone);
+          }
         });
     }
 
     // Configurar eventos para los enlaces del menú
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        // Solo procesar si no es un toggle de submenú
         if (!link.classList.contains('menu-toggle')) {
           e.preventDefault();
           const page = link.getAttribute('data-page');
           loadContent(page);
           
-          // Cerrar menú en dispositivos móviles
           if (window.innerWidth <= 768) {
             toggleMobileMenu();
           }
@@ -1203,7 +1304,7 @@ function testNotification() {
       });
     });
 
-    // Cargar contenido inicial (página de inicio) y verificar tema
+    // Inicializar
     document.addEventListener('DOMContentLoaded', () => {
       loadContent('index');
       checkSavedTheme();

@@ -4,30 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coco Querandí - Comunidad Cannábica del Oeste</title>
-  <link rel="icon" href="logo.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦉</text></svg>">
   <style>
     :root {
       /* Colores para modo claro */
       --bg-primary: #ffffff;
       --bg-secondary: #f8f9fa;
-      --bg-header: #2e7d32;
-      --bg-nav: #4caf50;
+      --bg-header: #ffffff;
+      --bg-nav: #ffffff;
       --text-primary: #212529;
       --text-secondary: #495057;
       --text-light: #6c757d;
-      --accent-color: #388e3c;
-      --accent-light: #c8e6c9;
+      --accent-color: #2e7d32;
+      --accent-light: #e8f5e9;
       --border-color: #dee2e6;
       --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       --overlay: rgba(0, 0, 0, 0.5);
+      --line-color: #c8e6c9;
     }
 
     .dark-mode {
       /* Colores para modo oscuro */
       --bg-primary: #121212;
       --bg-secondary: #1e1e1e;
-      --bg-header: #1b5e20;
-      --bg-nav: #2e7d32;
+      --bg-header: #1e1e1e;
+      --bg-nav: #1e1e1e;
       --text-primary: #e0e0e0;
       --text-secondary: #b0b0b0;
       --text-light: #8a8a8a;
@@ -36,6 +37,7 @@
       --border-color: #333333;
       --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
       --overlay: rgba(0, 0, 0, 0.7);
+      --line-color: #2e7d32;
     }
 
     body {
@@ -45,6 +47,10 @@
       color: var(--text-primary);
       line-height: 1.6;
       transition: background-color 0.3s, color 0.3s;
+      background-image: 
+        linear-gradient(90deg, var(--line-color) 1px, transparent 1px),
+        linear-gradient(180deg, var(--line-color) 1px, transparent 1px);
+      background-size: 20px 20px;
     }
 
     header {
@@ -52,10 +58,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       position: relative;
       z-index: 1000;
+      border-bottom: 2px solid var(--accent-color);
     }
 
     .logo-container {
@@ -64,23 +71,24 @@
     }
 
     header img {
-      height: 80px;
-      margin-right: 15px;
+      height: 200px;
+      margin-right: 20px;
     }
 
     .logo-text {
-      color: white;
+      color: var(--text-primary);
     }
 
     .logo-text h1 {
-      font-size: 1.3rem;
+      font-size: 2.4rem; /* 50% más grande que 1.6rem */
       margin: 0;
-      font-weight: 600;
+      font-weight: 700;
+      color: var(--accent-color);
     }
 
     .logo-text p {
-      font-size: 0.9rem;
-      margin: 0;
+      font-size: 1.2rem;
+      margin: 5px 0 0 0;
       opacity: 0.9;
     }
 
@@ -99,7 +107,7 @@
       display: block;
       width: 25px;
       height: 3px;
-      background-color: white;
+      background-color: var(--accent-color);
       margin: 3px 0;
       transition: 0.3s;
       border-radius: 2px;
@@ -111,43 +119,58 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: stretch;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--line-color);
     }
 
     nav a {
-      color: white;
-      padding: 12px 16px;
+      color: var(--text-primary);
+      padding: 15px 20px;
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 1rem;
       transition: 0.3s;
       cursor: pointer;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid var(--line-color);
+    }
+
+    nav a:last-child {
+      border-right: none;
     }
 
     nav a:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--accent-light);
+      color: var(--accent-color);
     }
 
     nav a.active {
-      background: rgba(255, 255, 255, 0.25);
+      background: var(--accent-light);
+      color: var(--accent-color);
       font-weight: 600;
     }
 
     /* Estilos para menú con submenús */
     .menu-item {
       position: relative;
+      display: flex;
+      align-items: stretch;
     }
 
     .menu-toggle {
       position: relative;
-      padding-right: 25px !important;
+      padding-right: 30px !important;
+      display: flex;
+      align-items: center;
     }
 
     .menu-toggle::after {
       content: "▼";
       position: absolute;
-      right: 10px;
+      right: 15px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 0.7rem;
@@ -164,9 +187,11 @@
       top: 100%;
       left: 0;
       background: var(--bg-nav);
-      min-width: 200px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      min-width: 220px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       z-index: 1000;
+      border: 1px solid var(--line-color);
+      border-top: none;
     }
 
     .menu-item.active .submenu {
@@ -175,9 +200,14 @@
 
     .submenu a {
       display: block;
-      padding: 10px 15px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--line-color);
       white-space: nowrap;
+      border-right: none;
+    }
+
+    .submenu a:last-child {
+      border-bottom: none;
     }
 
     /* Menú móvil flotante */
@@ -192,7 +222,8 @@
       z-index: 999;
       transition: right 0.3s ease;
       overflow-y: auto;
-      padding-top: 80px;
+      padding-top: 100px;
+      border-left: 1px solid var(--line-color);
     }
 
     .mobile-menu.active {
@@ -200,16 +231,20 @@
     }
 
     .mobile-menu a {
-      display: block;
-      color: white;
+      display: flex;
+      align-items: center;
+      color: var(--text-primary);
       padding: 15px 20px;
       text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--line-color);
       font-size: 1rem;
+      min-height: 50px;
+      box-sizing: border-box;
     }
 
     .mobile-menu a:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--accent-light);
+      color: var(--accent-color);
     }
 
     /* Estilos para submenús en móviles */
@@ -220,6 +255,7 @@
     .mobile-menu .menu-toggle {
       position: relative;
       padding-right: 40px !important;
+      min-height: 50px;
     }
 
     .mobile-menu .menu-toggle::after {
@@ -240,7 +276,9 @@
       display: none;
       position: static;
       box-shadow: none;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--accent-light);
+      border: none;
+      border-top: 1px solid var(--line-color);
     }
 
     .mobile-menu .menu-item.active .submenu {
@@ -249,7 +287,8 @@
 
     .mobile-menu .submenu a {
       padding-left: 40px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      min-height: 45px;
     }
 
     .overlay {
@@ -324,20 +363,51 @@
       color: var(--text-primary);
     }
 
+    /* Botón de suscripción */
+    .subscribe-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .subscribe-btn {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .subscribe-btn:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+    }
+
+    .subscribe-btn:active {
+      transform: translateY(0);
+    }
+
     footer {
       background: var(--bg-header);
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--text-secondary);
       text-align: center;
       padding: 25px 20px;
       font-size: 0.9rem;
       margin-top: 40px;
+      border-top: 2px solid var(--accent-color);
     }
 
     .theme-toggle {
       display: inline-block;
       margin-top: 15px;
       padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--accent-color);
       color: white;
       border: none;
       border-radius: 4px;
@@ -347,7 +417,7 @@
     }
 
     .theme-toggle:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: #1b5e20;
     }
 
     /* Estilos para contenido cargado */
@@ -355,6 +425,10 @@
       max-width: 1000px;
       margin: 0 auto;
       padding: 30px 20px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
     }
 
     .content-section h2 {
@@ -408,14 +482,86 @@
       color: var(--accent-color);
     }
 
+    /* Modal de suscripción */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-primary);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .modal h2 {
+      color: var(--accent-color);
+      margin-top: 0;
+    }
+
+    .modal p {
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .modal-btn.confirm {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .modal-btn.confirm:hover {
+      background: #1b5e20;
+    }
+
+    .modal-btn.cancel {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .modal-btn.cancel:hover {
+      background: var(--border-color);
+    }
+
     /* Estilos responsivos */
     @media (max-width: 768px) {
       .logo-text h1 {
-        font-size: 1.1rem;
+        font-size: 1.8rem;
       }
       
       .logo-text p {
-        font-size: 0.8rem;
+        font-size: 1rem;
       }
 
       .hamburger {
@@ -431,7 +577,7 @@
       }
       
       header img {
-        height: 65px;
+        height: 120px;
       }
       
       .content-section {
@@ -445,11 +591,32 @@
       .content-section h3 {
         font-size: 1.2rem;
       }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
     }
 
     @media (max-width: 480px) {
       header {
-        padding: 10px 15px;
+        padding: 15px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo-container {
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+      
+      header img {
+        height: 100px;
+        margin-right: 0;
+        margin-bottom: 10px;
       }
       
       .container {
@@ -597,6 +764,11 @@
   <div class="overlay" id="overlay"></div>
 
   <main id="main-content">
+    <!-- Botón de suscripción -->
+    <div class="subscribe-container">
+      <button class="subscribe-btn" id="subscribeBtn">Suscribirse a Novedades</button>
+    </div>
+
     <!-- Contenido se cargará aquí dinámicamente -->
     <section class="container" id="articulos">
       <p>Cargando artículos...</p>
@@ -609,6 +781,18 @@
       <button class="theme-toggle" id="themeToggle">Cambiar a modo oscuro</button>
     </div>
   </footer>
+
+  <!-- Modal de suscripción -->
+  <div class="modal" id="subscribeModal">
+    <div class="modal-content">
+      <h2>Suscribirse a Novedades</h2>
+      <p>¿Deseas recibir notificaciones cuando publiquemos nuevos artículos?</p>
+      <div class="modal-buttons">
+        <button class="modal-btn confirm" id="confirmSubscribe">Sí, suscribirme</button>
+        <button class="modal-btn cancel" id="cancelSubscribe">Ahora no</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Contenido de ejemplo para cuando no se encuentren los archivos -->
   <template id="tips-content">
@@ -704,6 +888,10 @@
     const navLinks = document.querySelectorAll('nav a, .mobile-menu a');
     const themeToggle = document.getElementById('themeToggle');
     const menuItems = document.querySelectorAll('.menu-item');
+    const subscribeBtn = document.getElementById('subscribeBtn');
+    const subscribeModal = document.getElementById('subscribeModal');
+    const confirmSubscribe = document.getElementById('confirmSubscribe');
+    const cancelSubscribe = document.getElementById('cancelSubscribe');
 
     // Función para abrir/cerrar el menú móvil
     function toggleMobileMenu() {
@@ -799,6 +987,75 @@
       closeAllSubmenus();
     });
 
+    // Funcionalidad de suscripción a notificaciones
+    function setupSubscription() {
+      subscribeBtn.addEventListener('click', () => {
+        subscribeModal.classList.add('active');
+      });
+
+      confirmSubscribe.addEventListener('click', () => {
+        subscribeToNotifications();
+        subscribeModal.classList.remove('active');
+      });
+
+      cancelSubscribe.addEventListener('click', () => {
+        subscribeModal.classList.remove('active');
+      });
+
+      // Cerrar modal al hacer clic fuera
+      subscribeModal.addEventListener('click', (e) => {
+        if (e.target === subscribeModal) {
+          subscribeModal.classList.remove('active');
+        }
+      });
+    }
+
+    // Suscribir a notificaciones
+    function subscribeToNotifications() {
+      if (!('Notification' in window)) {
+        alert('Tu navegador no soporta notificaciones');
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        // Ya está suscrito
+        saveSubscriptionToSheet();
+        alert('Ya estás suscrito a nuestras notificaciones');
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            saveSubscriptionToSheet();
+            alert('¡Te has suscrito exitosamente a nuestras notificaciones!');
+          }
+        });
+      } else {
+        alert('Has bloqueado las notificaciones. Para suscribirte, permite las notificaciones en la configuración de tu navegador.');
+      }
+    }
+
+    // Guardar suscripción en Google Sheets
+    function saveSubscriptionToSheet() {
+      const sheetID = "TU_ID_DE_HOJA_SUSCRIPTORES";
+      const sheetName = "Suscriptores";
+      const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+      
+      // En un caso real, aquí enviaríamos los datos del suscriptor a la hoja de cálculo
+      // Para este ejemplo, solo simulamos la acción
+      console.log('Suscripción guardada en la hoja de cálculo');
+      
+      // Aquí iría el código para enviar los datos a la hoja de cálculo
+      // fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     fecha: new Date().toISOString(),
+      //     userAgent: navigator.userAgent
+      //   })
+      // });
+    }
+
     // Cargar contenido según la página seleccionada
     function loadContent(page) {
       // Actualizar clase activa en el menú
@@ -867,6 +1124,9 @@
           });
           
           mainContent.innerHTML = '';
+          // Mantener el botón de suscripción
+          const subscribeContainer = document.querySelector('.subscribe-container');
+          mainContent.appendChild(subscribeContainer);
           mainContent.appendChild(container);
         })
         .catch(() => {
@@ -896,6 +1156,7 @@
       loadContent('index');
       checkSavedTheme();
       setupSubmenus();
+      setupSubscription();
     });
   </script>
 </body>

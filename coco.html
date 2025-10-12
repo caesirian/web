@@ -987,74 +987,126 @@
       closeAllSubmenus();
     });
 
-    // Funcionalidad de suscripción a notificaciones
-    function setupSubscription() {
-      subscribeBtn.addEventListener('click', () => {
-        subscribeModal.classList.add('active');
-      });
+    // Configuración - REEMPLAZA CON TUS DATOS REALES
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWq4KR7K8AEtz-f5EzKmDFIn28TB-ZvDWKM12fjswTC6urQ48gDJ4MMRVO5raVnc_B/exec";
 
-      confirmSubscribe.addEventListener('click', () => {
-        subscribeToNotifications();
-        subscribeModal.classList.remove('active');
-      });
+// Funcionalidad de suscripción a notificaciones
+function setupSubscription() {
+  subscribeBtn.addEventListener('click', () => {
+    // Mostrar modal para ingresar email
+    showEmailModal();
+  });
 
-      cancelSubscribe.addEventListener('click', () => {
-        subscribeModal.classList.remove('active');
-      });
-
-      // Cerrar modal al hacer clic fuera
-      subscribeModal.addEventListener('click', (e) => {
-        if (e.target === subscribeModal) {
-          subscribeModal.classList.remove('active');
-        }
-      });
+  confirmSubscribe.addEventListener('click', () => {
+    const email = document.getElementById('subscribeEmail').value;
+    if (validateEmail(email)) {
+      subscribeToNotifications(email);
+    } else {
+      alert('Por favor ingresa un email válido');
     }
+  });
 
-    // Suscribir a notificaciones
-    function subscribeToNotifications() {
-      if (!('Notification' in window)) {
-        alert('Tu navegador no soporta notificaciones');
-        return;
-      }
+  cancelSubscribe.addEventListener('click', () => {
+    subscribeModal.classList.remove('active');
+  });
 
-      if (Notification.permission === 'granted') {
-        // Ya está suscrito
-        saveSubscriptionToSheet();
-        alert('Ya estás suscrito a nuestras notificaciones');
-      } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-          if (permission === 'granted') {
-            saveSubscriptionToSheet();
-            alert('¡Te has suscrito exitosamente a nuestras notificaciones!');
-          }
-        });
-      } else {
-        alert('Has bloqueado las notificaciones. Para suscribirte, permite las notificaciones en la configuración de tu navegador.');
-      }
+  // Cerrar modal al hacer clic fuera
+  subscribeModal.addEventListener('click', (e) => {
+    if (e.target === subscribeModal) {
+      subscribeModal.classList.remove('active');
     }
+  });
+}
 
-    // Guardar suscripción en Google Sheets
-    function saveSubscriptionToSheet() {
-      const sheetID = "TU_ID_DE_HOJA_SUSCRIPTORES";
-      const sheetName = "Suscriptores";
-      const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+// Mostrar modal con campo de email
+function showEmailModal() {
+  subscribeModal.innerHTML = `
+    <div class="modal-content">
+      <h2>Suscribirse a Novedades</h2>
+      <p>Ingresa tu email para recibir notificaciones de nuevos artículos:</p>
+      <input type="email" id="subscribeEmail" placeholder="tu@email.com" required style="
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 1rem;
+      ">
+      <div class="modal-buttons">
+        <button class="modal-btn confirm" id="confirmSubscribe">Suscribirme</button>
+        <button class="modal-btn cancel" id="cancelSubscribe">Cancelar</button>
+      </div>
+    </div>
+  `;
+  
+  // Re-asignar eventos a los nuevos botones
+  document.getElementById('confirmSubscribe').addEventListener('click', confirmSubscribe.click);
+  document.getElementById('cancelSubscribe').addEventListener('click', cancelSubscribe.click);
+  
+  subscribeModal.classList.add('active');
+}
+
+// Validar email
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+// Suscribir a notificaciones
+function subscribeToNotifications(email) {
+  const subscriptionData = {
+    action: 'subscribe',
+    email: email,
+    userAgent: navigator.userAgent,
+    timestamp: new Date().toISOString()
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(subscriptionData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    subscribeModal.classList.remove('active');
+    if (data.success) {
+      alert('¡Te has suscrito exitosamente! Recibirás notificaciones por email.');
       
-      // En un caso real, aquí enviaríamos los datos del suscriptor a la hoja de cálculo
-      // Para este ejemplo, solo simulamos la acción
-      console.log('Suscripción guardada en la hoja de cálculo');
-      
-      // Aquí iría el código para enviar los datos a la hoja de cálculo
-      // fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     fecha: new Date().toISOString(),
-      //     userAgent: navigator.userAgent
-      //   })
-      // });
+      // También solicitar permisos para notificaciones del navegador
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    } else {
+      alert(data.message || 'Error en la suscripción');
     }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error de conexión. Intenta nuevamente.');
+  });
+}
+
+// Función para enviar notificación manual (para testing)
+function testNotification() {
+  const testData = {
+    action: 'sendNotification',
+    titulo: 'Test de Notificación',
+    mensaje: 'Esta es una notificación de prueba del sistema',
+    url: 'https://cocoquerandi.com.ar'
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(testData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Test result:', data);
+    alert('Notificación de prueba enviada: ' + data.message);
+  });
+}
 
     // Cargar contenido según la página seleccionada
     function loadContent(page) {
